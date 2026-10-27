@@ -1,0 +1,7 @@
+# Build / Temporary
+*.tmp
+*.log
+*.bak
+.vscode/
+.idea/
+scratch/
