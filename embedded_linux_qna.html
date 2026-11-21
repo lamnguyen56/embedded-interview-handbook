@@ -1,0 +1,1008 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Automotive Linux Study Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky top bar (title + language switch), left table of contents, one reading column of question blocks */
+:root{
+  --bg:#f5f7f8; --surface:#ffffff; --fg:#17212b; --muted:#566573; --line:#d6dde3;
+  --accent:#0b6e8f; --accent-soft:#e1f0f5; --warn:#9a5b00; --warn-soft:#fbf1dc;
+  --code-bg:#10202b; --code-fg:#d9e6ee; --code-dim:#7f9bab;
+  --display:"Space Grotesk","Segoe UI",Arial,sans-serif;
+  --body:"Inter","Segoe UI",Arial,sans-serif;
+  --mono:"JetBrains Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f171d; --surface:#17222b; --fg:#e4ecf1; --muted:#9db0bd; --line:#2b3a46;
+  --accent:#5cc0e0; --accent-soft:#143341; --warn:#f0b860; --warn-soft:#3a2c12;
+  --code-bg:#0a1218; --code-fg:#d9e6ee; --code-dim:#7f9bab; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f171d; --surface:#17222b; --fg:#e4ecf1; --muted:#9db0bd; --line:#2b3a46;
+  --accent:#5cc0e0; --accent-soft:#143341; --warn:#f0b860; --warn-soft:#3a2c12;
+  --code-bg:#0a1218; --code-fg:#d9e6ee; --code-dim:#7f9bab; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.65}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+#app[data-lang="vi"] .en, #app[data-lang="en"] .vi{display:none}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar-in,.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.bar-in{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
+.brand{font-family:var(--display);font-weight:700;font-size:17px;min-width:0}
+.lang{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:none}
+.lang button{font:600 13px var(--body);padding:7px 12px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+.lang button:focus-visible, a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.wrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:40px;padding-block:28px 80px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 68px);align-self:start;display:flex;flex-direction:column;gap:2px;font-size:14px}
+nav.toc a{color:var(--muted);text-decoration:none;padding:7px 10px;border-radius:6px;border-left:2px solid transparent}
+nav.toc a:hover{color:var(--fg);background:var(--accent-soft)}
+nav.toc .toc-h{font:600 11px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 10px 6px}
+main{min-width:0;max-width:780px}
+
+h1{font-family:var(--display);font-size:clamp(28px,5vw,40px);line-height:1.15;margin:0 0 10px;text-wrap:balance}
+.lede{color:var(--muted);margin:0 0 8px;max-width:65ch}
+h2{font-family:var(--display);font-size:24px;line-height:1.25;margin:56px 0 4px;padding-top:20px;border-top:2px solid var(--fg);text-wrap:balance;scroll-margin-top:80px}
+.lo{font:500 12px var(--mono);color:var(--muted);margin:0 0 8px}
+.q{margin-top:32px;scroll-margin-top:80px}
+.q h3{font-family:var(--display);font-size:19px;line-height:1.35;margin:0 0 10px;display:flex;gap:10px;align-items:baseline;text-wrap:balance}
+.q h3 .n{font:600 13px var(--mono);color:var(--accent);flex:none}
+p{margin:0 0 12px} ul,ol{margin:0 0 12px;padding-left:22px} li{margin-bottom:5px}
+code{font:500 .88em var(--mono);background:var(--accent-soft);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+pre{font:400 13px/1.6 var(--mono);background:var(--code-bg);color:var(--code-fg);padding:14px 16px;border-radius:8px;overflow-x:auto;margin:0 0 12px;tab-size:4}
+pre code{background:none;padding:0;font:inherit;color:inherit;overflow-wrap:normal}
+pre .c{color:var(--code-dim)}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px 4px;margin:14px 0}
+.tag{font:600 11px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+.tip{background:var(--warn-soft);border-radius:8px;padding:10px 14px;margin:14px 0;font-size:15px}
+.tip b{color:var(--warn)}
+.tbl{overflow-x:auto;margin:0 0 12px}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:480px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 12px var(--body);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 12px;font:500 13px var(--mono)}
+.flow span{background:var(--accent-soft);color:var(--fg);padding:5px 9px;border-radius:6px}
+.flow i{font-style:normal;color:var(--muted)}
+
+@media (max-width:820px){
+  .wrap{grid-template-columns:minmax(0,1fr);gap:16px;padding-block:18px 60px}
+  nav.toc{position:static;flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:6px}
+  nav.toc .toc-h{display:none}
+  nav.toc a{white-space:nowrap;border:1px solid var(--line);border-left:1px solid var(--line);background:var(--surface)}
+}
+</style>
+
+<div id="app" data-lang="vi">
+<header class="bar"><div class="bar-in">
+  <div class="brand">Automotive Linux Study Guide</div>
+  <div class="lang" role="group" aria-label="Language">
+    <button id="btn-vi" type="button" aria-pressed="true" data-l="vi">Tiếng Việt</button>
+    <button id="btn-en" type="button" aria-pressed="false" data-l="en">English</button>
+  </div>
+</div></header>
+
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+  <div class="toc-h"><span class="vi">Mục lục</span><span class="en">Contents</span></div>
+  <a href="#s1">1. Kernel &amp; Build</a>
+  <a href="#s2">2. Boot &amp; Debug</a>
+  <a href="#s3">3. Yocto / Buildroot</a>
+  <a href="#s4">4. Device Driver</a>
+  <a href="#s5">5. CAN Bus</a>
+  <a href="#s6">6. V4L2 / GStreamer</a>
+</nav>
+
+<main>
+<h1><span class="vi">19 câu hỏi Automotive Linux, giải thích cho người mới</span><span class="en">19 Automotive Linux questions, explained for beginners</span></h1>
+<p class="lede"><span class="vi">Mỗi câu có phần giải thích ngắn gọn, một ví dụ chạy được và một ghi chú dễ nhớ. Lệnh trong ví dụ dùng board ARM64 làm mẫu; tên board, đường dẫn và số GPIO bạn cần đổi theo board thật của mình.</span><span class="en">Each question has a short explanation, a runnable example and one thing to remember. Commands use an ARM64 board as the sample; change board names, paths and GPIO numbers to match your real board.</span></p>
+
+<!-- ============ SECTION 1 ============ -->
+<h2 id="s1">1. Linux Kernel Architecture &amp; Build</h2>
+<p class="lo">LO1, LO2</p>
+
+<section class="q" id="q1">
+<h3><span class="n">Q1</span><span><span class="vi">Kernel space khác user space thế nào? System call đi từ ứng dụng xuống kernel ra sao?</span><span class="en">Kernel space vs user space. How does a system call travel from an app to the kernel?</span></span></h3>
+<div class="vi">
+<p>Hãy hình dung một nhà hàng. <b>Khách</b> (ứng dụng) ngồi ở phòng ăn, không được vào bếp. <b>Bếp</b> (kernel) có dao, lửa, nguyên liệu, tức là phần cứng. Khách muốn món gì thì gọi <b>phục vụ</b> (system call).</p>
+<div class="tbl"><table>
+<tr><th></th><th>User space</th><th>Kernel space</th></tr>
+<tr><td>Ai chạy ở đây</td><td>Ứng dụng, thư viện (libc), shell</td><td>Kernel, driver, scheduler, quản lý bộ nhớ</td></tr>
+<tr><td>Quyền CPU</td><td>Thấp (ARM64: EL0, x86: ring 3)</td><td>Cao (ARM64: EL1, x86: ring 0)</td></tr>
+<tr><td>Truy cập phần cứng</td><td>Không trực tiếp</td><td>Trực tiếp</td></tr>
+<tr><td>Khi bị lỗi</td><td>Chỉ process đó chết (segfault)</td><td>Cả hệ thống có thể treo (kernel panic)</td></tr>
+</table></div>
+<p>Đường đi của một system call, ví dụ <code>write()</code>:</p>
+<ol>
+<li>Ứng dụng gọi <code>write(fd, buf, len)</code>. Đây là hàm bọc (wrapper) trong libc.</li>
+<li>libc đặt <b>số hiệu syscall</b> vào thanh ghi (ARM64: <code>x8</code>, x86-64: <code>rax</code>) và các tham số vào những thanh ghi khác.</li>
+<li>libc chạy một lệnh đặc biệt (ARM64: <code>svc #0</code>, x86-64: <code>syscall</code>). CPU chuyển sang chế độ kernel và nhảy tới điểm vào đã định sẵn.</li>
+<li>Kernel tra <b>bảng syscall</b> theo số hiệu, gọi <code>sys_write()</code>.</li>
+<li><code>sys_write</code> đi qua VFS, tới driver của file hoặc thiết bị đó, driver ghi xuống phần cứng.</li>
+<li>Kết quả trả về qua thanh ghi, CPU quay lại user mode, ứng dụng chạy tiếp.</li>
+</ol>
+</div>
+<div class="en">
+<p>Picture a restaurant. The <b>customer</b> (application) sits in the dining room and may not enter the kitchen. The <b>kitchen</b> (kernel) holds the knives, fire and ingredients, which is the hardware. The customer orders through a <b>waiter</b> (system call).</p>
+<div class="tbl"><table>
+<tr><th></th><th>User space</th><th>Kernel space</th></tr>
+<tr><td>What runs here</td><td>Apps, libraries (libc), shell</td><td>Kernel, drivers, scheduler, memory manager</td></tr>
+<tr><td>CPU privilege</td><td>Low (ARM64: EL0, x86: ring 3)</td><td>High (ARM64: EL1, x86: ring 0)</td></tr>
+<tr><td>Hardware access</td><td>Not direct</td><td>Direct</td></tr>
+<tr><td>On a bug</td><td>Only that process dies (segfault)</td><td>The whole system can stop (kernel panic)</td></tr>
+</table></div>
+<p>The path of one system call, for example <code>write()</code>:</p>
+<ol>
+<li>The app calls <code>write(fd, buf, len)</code>. This is a wrapper function in libc.</li>
+<li>libc puts the <b>syscall number</b> in a register (ARM64: <code>x8</code>, x86-64: <code>rax</code>) and the arguments in other registers.</li>
+<li>libc runs a special instruction (ARM64: <code>svc #0</code>, x86-64: <code>syscall</code>). The CPU switches to kernel mode and jumps to a fixed entry point.</li>
+<li>The kernel looks the number up in the <b>syscall table</b> and calls <code>sys_write()</code>.</li>
+<li><code>sys_write</code> goes through the VFS to the driver for that file or device, and the driver writes to hardware.</li>
+<li>The result comes back in a register, the CPU returns to user mode, and the app continues.</li>
+</ol>
+</div>
+<div class="flow"><span>app</span><i>→</i><span>libc write()</span><i>→</i><span>svc / syscall</span><i>→</i><span>syscall table</span><i>→</i><span>VFS</span><i>→</i><span>driver</span><i>→</i><span>hardware</span></div>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ</span><span class="en">Example</span></p>
+<p><span class="vi"><code>strace</code> in ra mọi system call mà một chương trình thực hiện:</span><span class="en"><code>strace</code> prints every system call a program makes:</span></p>
+<pre><code>$ strace -e trace=openat,write,close echo hello
+openat(AT_FDCWD, "/lib/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+write(1, "hello\n", 6)                  = 6     <span class="c"># fd 1 = stdout, 6 bytes written</span>
+close(1)                                = 0</code></pre></div>
+<div class="tip"><b><span class="vi">Dễ nhớ:</span><span class="en">Remember:</span></b> <span class="vi">ứng dụng không bao giờ chạm phần cứng. Nó luôn nhờ kernel qua system call.</span><span class="en">an app never touches hardware. It always asks the kernel through a system call.</span></div>
+</section>
+
+<section class="q" id="q2">
+<h3><span class="n">Q2</span><span><span class="vi">Các bước cross-compile kernel? Bật/tắt config nào cho automotive và vì sao?</span><span class="en">Steps to cross-compile the kernel? Which configs for automotive, and why?</span></span></h3>
+<div class="vi">
+<p><b>Cross-compile</b> nghĩa là build trên PC (x86) nhưng tạo ra file chạy cho board (ARM). Lý do: board yếu, build kernel trên board mất nhiều giờ.</p>
+<ol>
+<li>Cài <b>toolchain</b> cho kiến trúc đích (ví dụ <code>aarch64-linux-gnu-gcc</code>).</li>
+<li>Lấy source kernel (thường từ nhà sản xuất chip, vì có sẵn driver cho board).</li>
+<li>Đặt 2 biến: <code>ARCH</code> (kiến trúc) và <code>CROSS_COMPILE</code> (tiền tố của toolchain).</li>
+<li>Nạp cấu hình mặc định của board: <code>make &lt;board&gt;_defconfig</code>.</li>
+<li>Chỉnh cấu hình: <code>make menuconfig</code>.</li>
+<li>Build kernel image, device tree (DTB) và module.</li>
+<li>Chép <code>Image</code>, file <code>.dtb</code> và thư mục module sang board.</li>
+</ol>
+</div>
+<div class="en">
+<p><b>Cross-compiling</b> means building on a PC (x86) but producing files that run on the board (ARM). The reason: the board is slow, and building a kernel on it takes hours.</p>
+<ol>
+<li>Install a <b>toolchain</b> for the target architecture (for example <code>aarch64-linux-gnu-gcc</code>).</li>
+<li>Get the kernel source (usually from the chip vendor, because it already has the board drivers).</li>
+<li>Set two variables: <code>ARCH</code> (architecture) and <code>CROSS_COMPILE</code> (toolchain prefix).</li>
+<li>Load the board's default config: <code>make &lt;board&gt;_defconfig</code>.</li>
+<li>Adjust the config: <code>make menuconfig</code>.</li>
+<li>Build the kernel image, device tree (DTB) and modules.</li>
+<li>Copy <code>Image</code>, the <code>.dtb</code> file and the modules directory to the board.</li>
+</ol>
+</div>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ</span><span class="en">Example</span></p>
+<pre><code>export ARCH=arm64
+export CROSS_COMPILE=aarch64-linux-gnu-
+
+make defconfig                 <span class="c"># or: make &lt;your_board&gt;_defconfig</span>
+make menuconfig                <span class="c"># turn options on/off</span>
+make -j$(nproc) Image dtbs modules
+make modules_install INSTALL_MOD_PATH=/path/to/rootfs
+
+<span class="c"># results</span>
+arch/arm64/boot/Image
+arch/arm64/boot/dts/&lt;vendor&gt;/&lt;board&gt;.dtb</code></pre></div>
+<div class="tbl"><table>
+<tr><th>Config</th><th><span class="vi">Bật / tắt</span><span class="en">On / off</span></th><th><span class="vi">Vì sao</span><span class="en">Why</span></th></tr>
+<tr><td><code>CONFIG_CAN</code>, <code>CONFIG_CAN_RAW</code>, <code>CONFIG_CAN_VCAN</code> + <span class="vi">driver của chip CAN</span><span class="en">your CAN controller driver</span></td><td>On</td><td><span class="vi">Giao tiếp CAN bus với các ECU; vcan để test không cần phần cứng</span><span class="en">Talk to ECUs over CAN; vcan lets you test without hardware</span></td></tr>
+<tr><td><code>CONFIG_MEDIA_SUPPORT</code>, <code>CONFIG_VIDEO_DEV</code>, <code>CONFIG_USB_VIDEO_CLASS</code></td><td>On</td><td><span class="vi">V4L2 và camera (camera lùi, USB camera)</span><span class="en">V4L2 and cameras (rear camera, USB camera)</span></td></tr>
+<tr><td><code>CONFIG_PREEMPT</code> / <code>CONFIG_PREEMPT_RT</code></td><td>On</td><td><span class="vi">Phản hồi nhanh và ổn định hơn cho tác vụ gần real-time</span><span class="en">Lower, more predictable latency for near-real-time work</span></td></tr>
+<tr><td><code>CONFIG_WATCHDOG</code></td><td>On</td><td><span class="vi">Tự reset khi hệ thống treo, yêu cầu an toàn</span><span class="en">Auto-reset when the system hangs, a safety need</span></td></tr>
+<tr><td><code>CONFIG_DEVTMPFS</code>, <code>CONFIG_DEVTMPFS_MOUNT</code></td><td>On</td><td><span class="vi">Tự tạo <code>/dev</code> từ sớm</span><span class="en">Creates <code>/dev</code> nodes early</span></td></tr>
+<tr><td><span class="vi">Driver không dùng (WiFi, sound card lạ, filesystem thừa)</span><span class="en">Unused drivers (WiFi, odd sound cards, extra filesystems)</span></td><td>Off</td><td><span class="vi">Kernel nhỏ hơn, boot nhanh hơn, ít bề mặt tấn công hơn</span><span class="en">Smaller kernel, faster boot, smaller attack surface</span></td></tr>
+<tr><td><code>CONFIG_DEBUG_INFO</code>, <span class="vi">các tuỳ chọn debug nặng</span><span class="en">heavy debug options</span></td><td><span class="vi">Off ở bản phát hành</span><span class="en">Off for release</span></td><td><span class="vi">Giảm dung lượng và thời gian boot; chỉ bật khi đang debug</span><span class="en">Cuts size and boot time; enable only while debugging</span></td></tr>
+</table></div>
+<div class="tip"><b><span class="vi">Lưu ý:</span><span class="en">Note:</span></b> <span class="vi">câu hỏi này hỏi về việc <i>bạn</i> đã làm. Bảng trên là bộ config điển hình; khi trả lời hãy kể đúng những config bạn đã thực sự đổi trong OJT và lý do của từng cái. Driver cần để boot (storage, serial) nên chọn <code>y</code> (built-in), không phải <code>m</code> (module).</span><span class="en">this question asks what <i>you</i> did. The table is a typical set; when answering, name the configs you really changed in your OJT and the reason for each. Drivers needed for booting (storage, serial) should be <code>y</code> (built-in), not <code>m</code> (module).</span></div>
+</section>
+
+<section class="q" id="q3">
+<h3><span class="n">Q3</span><span><span class="vi">Kernel build xong nhưng không chạy trên board. Kiểm tra gì trước?</span><span class="en">The kernel built but does not run on the board. What do you check first?</span></span></h3>
+<div class="vi"><p>Kiểm tra theo thứ tự từ dễ đến khó:</p>
+<ol>
+<li><b>Đúng kiến trúc chưa?</b> <code>file vmlinux</code> phải báo ARM aarch64, không phải x86-64. Quên <code>ARCH</code> là lỗi rất hay gặp.</li>
+<li><b>Đúng loại image chưa?</b> ARM64 dùng <code>Image</code> với lệnh <code>booti</code>; ARM 32-bit dùng <code>zImage</code> với <code>bootz</code>; <code>uImage</code> dùng <code>bootm</code>.</li>
+<li><b>DTB có đúng board không?</b> DTB sai thì kernel không biết UART, RAM nằm ở đâu và sẽ im lặng.</li>
+<li><b>bootargs:</b> <code>console=</code> có đúng cổng và baudrate không? <code>root=</code> có trỏ đúng phân vùng không?</li>
+<li><b>Địa chỉ load:</b> kernel và DTB có đè lên nhau trong RAM không?</li>
+<li><b>Driver thiết yếu</b> (UART, eMMC/SD, filesystem ext4) có build dạng built-in không?</li>
+<li><b>File có hỏng khi chép không?</b> So sánh kích thước hoặc <code>md5sum</code>.</li>
+</ol></div>
+<div class="en"><p>Check from easiest to hardest:</p>
+<ol>
+<li><b>Right architecture?</b> <code>file vmlinux</code> must say ARM aarch64, not x86-64. Forgetting <code>ARCH</code> is a very common mistake.</li>
+<li><b>Right image type?</b> ARM64 uses <code>Image</code> with <code>booti</code>; 32-bit ARM uses <code>zImage</code> with <code>bootz</code>; <code>uImage</code> uses <code>bootm</code>.</li>
+<li><b>Does the DTB match the board?</b> With the wrong DTB the kernel does not know where the UART and RAM are, and stays silent.</li>
+<li><b>bootargs:</b> is <code>console=</code> the right port and baud rate? Does <code>root=</code> point at the right partition?</li>
+<li><b>Load addresses:</b> do the kernel and DTB overlap in RAM?</li>
+<li><b>Essential drivers</b> (UART, eMMC/SD, ext4) built in rather than as modules?</li>
+<li><b>Was the file damaged while copying?</b> Compare size or <code>md5sum</code>.</li>
+</ol></div>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ</span><span class="en">Example</span></p>
+<pre><code>$ file vmlinux
+vmlinux: ELF 64-bit LSB executable, ARM aarch64, ...   <span class="c"># good</span>
+
+$ grep -E "CONFIG_SERIAL_.*CONSOLE|CONFIG_MMC=|CONFIG_EXT4_FS=" .config
+CONFIG_SERIAL_8250_CONSOLE=y
+CONFIG_MMC=y
+CONFIG_EXT4_FS=y                                       <span class="c"># =y, not =m</span></code></pre></div>
+</section>
+
+<!-- ============ SECTION 2 ============ -->
+<h2 id="s2">2. Boot Process &amp; System Debugging</h2>
+<p class="lo">LO3</p>
+
+<section class="q" id="q4">
+<h3><span class="n">Q4</span><span><span class="vi">Chuỗi boot: bootloader → kernel → init → userspace. Mỗi bước làm gì?</span><span class="en">The boot chain: bootloader → kernel → init → userspace. What does each step do?</span></span></h3>
+<div class="flow"><span>ROM code</span><i>→</i><span>SPL</span><i>→</i><span>U-Boot</span><i>→</i><span>Kernel</span><i>→</i><span>init (PID 1)</span><i>→</i><span>services + app</span></div>
+<div class="tbl"><table>
+<tr><th><span class="vi">Bước</span><span class="en">Stage</span></th><th><span class="vi">Nhiệm vụ</span><span class="en">Job</span></th></tr>
+<tr><td>ROM code</td><td><span class="vi">Code cứng trong chip. Chạy đầu tiên khi cấp nguồn, tìm thiết bị boot (SD, eMMC) và nạp SPL.</span><span class="en">Code burned into the chip. Runs first at power-on, finds the boot device (SD, eMMC) and loads the SPL.</span></td></tr>
+<tr><td>SPL</td><td><span class="vi">Bootloader nhỏ. Khởi tạo RAM (DDR) rồi nạp U-Boot đầy đủ vào RAM.</span><span class="en">A tiny bootloader. Initialises RAM (DDR), then loads full U-Boot into RAM.</span></td></tr>
+<tr><td>U-Boot</td><td><span class="vi">Khởi tạo UART, storage, mạng. Nạp kernel + DTB vào RAM, truyền <code>bootargs</code>, rồi nhảy vào kernel.</span><span class="en">Sets up UART, storage, network. Loads kernel + DTB into RAM, passes <code>bootargs</code>, then jumps to the kernel.</span></td></tr>
+<tr><td>Kernel</td><td><span class="vi">Tự giải nén, bật MMU, đọc DTB, khởi tạo driver, mount root filesystem, rồi chạy <code>/sbin/init</code>.</span><span class="en">Decompresses itself, enables the MMU, reads the DTB, starts drivers, mounts the root filesystem, then runs <code>/sbin/init</code>.</span></td></tr>
+<tr><td>init (PID 1)</td><td><span class="vi">Process user space đầu tiên (systemd hoặc BusyBox init). Mount <code>/proc</code>, <code>/sys</code>, khởi động các service.</span><span class="en">The first user-space process (systemd or BusyBox init). Mounts <code>/proc</code>, <code>/sys</code> and starts services.</span></td></tr>
+<tr><td>Userspace</td><td><span class="vi">Mạng, logging, rồi ứng dụng chính (HMI, camera, media player).</span><span class="en">Networking, logging, then the main apps (HMI, camera, media player).</span></td></tr>
+</table></div>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ: nhận biết từng giai đoạn trên serial log</span><span class="en">Example: spotting each stage in the serial log</span></p>
+<pre><code>U-Boot SPL 2023.04 (...)                 <span class="c"># SPL</span>
+U-Boot 2023.04 (...)                     <span class="c"># U-Boot</span>
+Hit any key to stop autoboot:  0
+Starting kernel ...                      <span class="c"># U-Boot hands over</span>
+[    0.000000] Booting Linux on physical CPU 0x0   <span class="c"># kernel</span>
+[    1.82] VFS: Mounted root (ext4 filesystem) on device 179:2.
+[    1.90] Run /sbin/init as init process           <span class="c"># init</span>
+Welcome to ...                           <span class="c"># userspace</span>
+board login:</code></pre></div>
+</section>
+
+<section class="q" id="q5">
+<h3><span class="n">Q5</span><span><span class="vi">Board dừng ở "Starting kernel..." và im lặng. Phân tích và debug thế nào?</span><span class="en">The board stops at "Starting kernel..." with no more log. How do you analyse and debug?</span></span></h3>
+<div class="vi">
+<p>Dòng này là dòng <i>cuối cùng của U-Boot</i>. Sau nó là việc của kernel. Im lặng có hai khả năng: kernel <b>đang chạy nhưng không in ra được</b>, hoặc kernel <b>chết ngay từ đầu</b>.</p>
+<div class="tbl"><table>
+<tr><th>Nguyên nhân</th><th>Cách kiểm tra</th></tr>
+<tr><td>Sai <code>console=</code> trong bootargs (hay gặp nhất)</td><td><code>printenv bootargs</code>. Tên cổng phải khớp driver, ví dụ <code>ttyS0</code>, <code>ttyAMA0</code>, <code>ttymxc0</code>.</td></tr>
+<tr><td>Sai hoặc thiếu DTB</td><td>Kiểm tra tên file <code>.dtb</code>; dùng <code>fdt addr</code>, <code>fdt print /model</code> trong U-Boot.</td></tr>
+<tr><td>Địa chỉ load chồng lên nhau</td><td>So sánh <code>kernel_addr_r</code>, <code>fdt_addr_r</code> với kích thước image.</td></tr>
+<tr><td>Sai kiến trúc / sai loại image</td><td><code>file vmlinux</code> trên PC; dùng đúng <code>booti</code>/<code>bootz</code>.</td></tr>
+<tr><td>Kernel thiếu driver serial console</td><td>Xem <code>.config</code>.</td></tr>
+</table></div>
+<p>Công cụ mạnh nhất là <b><code>earlycon</code></b>: cho kernel in log rất sớm, trước khi driver console chính thức chạy. Nếu có log với earlycon thì kernel vẫn sống, lỗi nằm ở cấu hình console. Nếu vẫn im lặng thì nghi DTB, địa chỉ load hoặc image.</p>
+</div>
+<div class="en">
+<p>That line is the <i>last line from U-Boot</i>. Everything after it is the kernel's job. Silence has two possible meanings: the kernel is <b>running but cannot print</b>, or it <b>died right at the start</b>.</p>
+<div class="tbl"><table>
+<tr><th>Cause</th><th>How to check</th></tr>
+<tr><td>Wrong <code>console=</code> in bootargs (most common)</td><td><code>printenv bootargs</code>. The port name must match the driver, e.g. <code>ttyS0</code>, <code>ttyAMA0</code>, <code>ttymxc0</code>.</td></tr>
+<tr><td>Wrong or missing DTB</td><td>Check the <code>.dtb</code> file name; use <code>fdt addr</code>, <code>fdt print /model</code> in U-Boot.</td></tr>
+<tr><td>Overlapping load addresses</td><td>Compare <code>kernel_addr_r</code>, <code>fdt_addr_r</code> with the image size.</td></tr>
+<tr><td>Wrong architecture / image type</td><td><code>file vmlinux</code> on the PC; use the right <code>booti</code>/<code>bootz</code>.</td></tr>
+<tr><td>Kernel lacks the serial console driver</td><td>Look in <code>.config</code>.</td></tr>
+</table></div>
+<p>The strongest tool is <b><code>earlycon</code></b>: it makes the kernel print very early, before the real console driver starts. If logs appear with earlycon, the kernel is alive and the fault is in the console setup. If it is still silent, suspect the DTB, load addresses or the image.</p>
+</div>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ</span><span class="en">Example</span></p>
+<pre><code>=> printenv bootargs
+bootargs=console=ttyS1,115200 root=/dev/mmcblk0p2 rootwait   <span class="c"># board uses ttyS0 → silent</span>
+
+=> setenv bootargs console=ttyS0,115200 earlycon root=/dev/mmcblk0p2 rootwait
+=> boot
+[    0.000000] earlycon: uart8250 at MMIO 0x... (options '')  <span class="c"># now we see logs</span></code></pre></div>
+</section>
+
+<section class="q" id="q6">
+<h3><span class="n">Q6</span><span><span class="vi">Dùng serial console và U-Boot để xác định lỗi boot thế nào?</span><span class="en">How do you use the serial console and U-Boot to locate a boot failure?</span></span></h3>
+<div class="vi">
+<p><b>Serial console</b> là kênh debug đầu tiên vì nó hoạt động trước cả màn hình và mạng. Nối USB-UART (TX, RX, GND), mở terminal ở 115200 8N1. Ý tưởng chính: <b>log dừng ở đâu thì lỗi ở giai đoạn đó</b>.</p>
+<div class="tbl"><table>
+<tr><th>Triệu chứng</th><th>Giai đoạn lỗi</th><th>Nghi ngờ</th></tr>
+<tr><td>Không có ký tự nào</td><td>ROM / SPL</td><td>Nguồn, dây TX/RX ngược, baudrate, thẻ SD ghi sai</td></tr>
+<tr><td>Có SPL, không có U-Boot</td><td>SPL</td><td>Khởi tạo DDR, file U-Boot hỏng</td></tr>
+<tr><td>U-Boot báo không đọc được file</td><td>U-Boot</td><td>Sai phân vùng, sai tên file</td></tr>
+<tr><td>Dừng ở "Starting kernel..."</td><td>Kernel sớm</td><td>Xem Q5</td></tr>
+<tr><td><code>VFS: Unable to mount root fs</code></td><td>Kernel muộn</td><td>Sai <code>root=</code>, thiếu driver storage/filesystem, thiếu <code>rootwait</code></td></tr>
+<tr><td><code>No working init found</code></td><td>init</td><td>Rootfs thiếu <code>/sbin/init</code> hoặc sai kiến trúc</td></tr>
+</table></div>
+<p>Nhấn một phím để dừng autoboot, sau đó boot <b>thủ công từng bước</b> để thấy bước nào hỏng.</p>
+</div>
+<div class="en">
+<p>The <b>serial console</b> is the first debug channel because it works before the display and network do. Connect a USB-UART adapter (TX, RX, GND) and open a terminal at 115200 8N1. The main idea: <b>where the log stops is the stage that failed</b>.</p>
+<div class="tbl"><table>
+<tr><th>Symptom</th><th>Failing stage</th><th>Suspect</th></tr>
+<tr><td>No characters at all</td><td>ROM / SPL</td><td>Power, swapped TX/RX, baud rate, badly written SD card</td></tr>
+<tr><td>SPL prints, U-Boot does not</td><td>SPL</td><td>DDR init, corrupt U-Boot file</td></tr>
+<tr><td>U-Boot cannot read a file</td><td>U-Boot</td><td>Wrong partition, wrong file name</td></tr>
+<tr><td>Stops at "Starting kernel..."</td><td>Early kernel</td><td>See Q5</td></tr>
+<tr><td><code>VFS: Unable to mount root fs</code></td><td>Late kernel</td><td>Wrong <code>root=</code>, missing storage/filesystem driver, missing <code>rootwait</code></td></tr>
+<tr><td><code>No working init found</code></td><td>init</td><td>Rootfs lacks <code>/sbin/init</code> or is for another architecture</td></tr>
+</table></div>
+<p>Press a key to stop autoboot, then boot <b>by hand, one step at a time</b>, to see which step breaks.</p>
+</div>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ: boot thủ công trong U-Boot</span><span class="en">Example: manual boot in U-Boot</span></p>
+<pre><code>$ sudo minicom -D /dev/ttyUSB0 -b 115200     <span class="c"># on the PC</span>
+
+=> printenv                                  <span class="c"># all variables (bootcmd, bootargs...)</span>
+=> mmc list ; mmc dev 0                      <span class="c"># is the SD/eMMC detected?</span>
+=> fatls mmc 0:1                             <span class="c"># are Image and the .dtb there?</span>
+=> fatload mmc 0:1 ${kernel_addr_r} Image
+=> fatload mmc 0:1 ${fdt_addr_r} myboard.dtb
+=> setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p2 rootwait
+=> booti ${kernel_addr_r} - ${fdt_addr_r}    <span class="c"># "-" means no initramfs</span>
+=> saveenv                                   <span class="c"># only after it works</span></code></pre></div>
+</section>
+
+<!-- ============ SECTION 3 ============ -->
+<h2 id="s3">3. Yocto Project / Buildroot</h2>
+<p class="lo">LO4 – LO7</p>
+
+<section class="q" id="q7">
+<h3><span class="n">Q7</span><span><span class="vi">Phân biệt layer, recipe, BitBake. Image được build ra thế nào?</span><span class="en">Layer, recipe and BitBake. How is an image built from them?</span></span></h3>
+<div class="tbl"><table>
+<tr><th></th><th><span class="vi">Là gì</span><span class="en">What it is</span></th><th><span class="vi">So sánh với nấu ăn</span><span class="en">Cooking analogy</span></th></tr>
+<tr><td><b>Recipe</b> (<code>.bb</code>)</td><td><span class="vi">File mô tả cách build <i>một</i> phần mềm: lấy source ở đâu, compile thế nào, cài vào đâu.</span><span class="en">A file describing how to build <i>one</i> piece of software: where the source is, how to compile, where to install.</span></td><td><span class="vi">Công thức một món</span><span class="en">The recipe for one dish</span></td></tr>
+<tr><td><b>Layer</b> (<code>meta-*</code>)</td><td><span class="vi">Thư mục gom các recipe và cấu hình cùng chủ đề (BSP, Qt, ứng dụng của công ty).</span><span class="en">A directory grouping related recipes and config (BSP, Qt, your company's apps).</span></td><td><span class="vi">Cuốn sách nấu ăn</span><span class="en">A cookbook</span></td></tr>
+<tr><td><b>BitBake</b></td><td><span class="vi">Công cụ đọc recipe, tính thứ tự phụ thuộc và chạy các task.</span><span class="en">The tool that reads recipes, works out dependencies and runs the tasks.</span></td><td><span class="vi">Đầu bếp</span><span class="en">The chef</span></td></tr>
+<tr><td><b>Image</b></td><td><span class="vi">Cũng là một recipe, liệt kê các package vào rootfs.</span><span class="en">Also a recipe; it lists the packages that go in the rootfs.</span></td><td><span class="vi">Thực đơn bữa tiệc</span><span class="en">The banquet menu</span></td></tr>
+</table></div>
+<div class="vi"><p>Khi chạy <code>bitbake core-image-minimal</code>:</p>
+<ol>
+<li>Đọc <code>conf/bblayers.conf</code> (dùng layer nào) và <code>conf/local.conf</code> (<code>MACHINE</code> nào).</li>
+<li>Parse tất cả recipe, dựng cây phụ thuộc.</li>
+<li>Với mỗi recipe, chạy lần lượt các task bên dưới.</li>
+<li>Gom package thành rootfs (<code>do_rootfs</code>), tạo file image (<code>do_image</code>).</li>
+<li>Kết quả nằm ở <code>tmp/deploy/images/&lt;machine&gt;/</code>.</li>
+</ol></div>
+<div class="en"><p>When you run <code>bitbake core-image-minimal</code>:</p>
+<ol>
+<li>It reads <code>conf/bblayers.conf</code> (which layers) and <code>conf/local.conf</code> (which <code>MACHINE</code>).</li>
+<li>It parses every recipe and builds the dependency tree.</li>
+<li>For each recipe it runs the tasks below in order.</li>
+<li>It assembles packages into a rootfs (<code>do_rootfs</code>) and creates the image file (<code>do_image</code>).</li>
+<li>Output lands in <code>tmp/deploy/images/&lt;machine&gt;/</code>.</li>
+</ol></div>
+<div class="flow"><span>do_fetch</span><i>→</i><span>do_unpack</span><i>→</i><span>do_patch</span><i>→</i><span>do_configure</span><i>→</i><span>do_compile</span><i>→</i><span>do_install</span><i>→</i><span>do_package</span><i>→</i><span>do_rootfs</span><i>→</i><span>do_image</span></div>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ</span><span class="en">Example</span></p>
+<pre><code>$ source oe-init-build-env build      <span class="c"># enter the build directory</span>
+$ bitbake-layers show-layers          <span class="c"># which layers are active</span>
+$ bitbake-layers show-recipes "busy*" <span class="c"># which layer provides busybox</span>
+$ bitbake core-image-minimal          <span class="c"># build the image</span>
+$ bitbake -c listtasks busybox        <span class="c"># all tasks of one recipe</span></code></pre></div>
+</section>
+
+<section class="q" id="q8">
+<h3><span class="n">Q8</span><span><span class="vi">Viết recipe cơ bản có <code>SRC_URI</code>, <code>do_compile</code>, <code>do_install</code>. Đưa package vào image thế nào?</span><span class="en">Write a basic recipe with <code>SRC_URI</code>, <code>do_compile</code>, <code>do_install</code>. How do you add the package to an image?</span></span></h3>
+<p><span class="vi">Cấu trúc layer của bạn:</span><span class="en">Your layer layout:</span></p>
+<pre><code>meta-mylayer/
+├── conf/layer.conf
+└── recipes-example/hello/
+    ├── hello_1.0.bb
+    └── files/hello.c</code></pre>
+<div class="ex"><p class="tag">hello_1.0.bb</p>
+<pre><code>SUMMARY = "Simple hello world program"
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
+
+SRC_URI = "file://hello.c"          <span class="c"># where the source comes from</span>
+S = "${WORKDIR}"                    <span class="c"># where the source sits after unpack</span>
+
+do_compile() {
+    ${CC} ${CFLAGS} ${LDFLAGS} hello.c -o hello     <span class="c"># ${CC} is the cross compiler</span>
+}
+
+do_install() {
+    install -d ${D}${bindir}                 <span class="c"># create /usr/bin inside the package</span>
+    install -m 0755 hello ${D}${bindir}/     <span class="c"># copy the binary there</span>
+}</code></pre></div>
+<div class="vi"><ul>
+<li><code>SRC_URI</code>: nguồn. <code>file://</code> là file cạnh recipe; cũng có thể là <code>git://</code> hay <code>https://</code>.</li>
+<li><code>do_compile</code>: luôn dùng <code>${CC}</code>, không gõ <code>gcc</code>, vì <code>gcc</code> là compiler của PC.</li>
+<li><code>do_install</code>: <code>${D}</code> là thư mục tạm đóng vai trò gốc <code>/</code> của board. <code>${bindir}</code> là <code>/usr/bin</code>.</li>
+</ul>
+<p>Đưa vào image: thêm một dòng vào <code>conf/local.conf</code> (hoặc vào recipe image của bạn), rồi build lại.</p></div>
+<div class="en"><ul>
+<li><code>SRC_URI</code>: the source. <code>file://</code> is a file next to the recipe; it can also be <code>git://</code> or <code>https://</code>.</li>
+<li><code>do_compile</code>: always use <code>${CC}</code>, never plain <code>gcc</code>, because <code>gcc</code> is the PC's compiler.</li>
+<li><code>do_install</code>: <code>${D}</code> is a temporary directory that plays the role of the board's <code>/</code>. <code>${bindir}</code> is <code>/usr/bin</code>.</li>
+</ul>
+<p>To add it to an image: put one line in <code>conf/local.conf</code> (or in your image recipe), then rebuild.</p></div>
+<pre><code>IMAGE_INSTALL:append = " hello"      <span class="c"># the leading space is required</span>
+
+$ bitbake-layers add-layer ../meta-mylayer
+$ bitbake hello                      <span class="c"># test the recipe alone first</span>
+$ bitbake core-image-minimal</code></pre>
+<div class="tip"><b><span class="vi">Lưu ý phiên bản:</span><span class="en">Version notes:</span></b> <span class="vi">bản Yocto cũ (trước Honister 3.4) viết <code>IMAGE_INSTALL_append</code>. Các bản rất mới unpack source vào <code>${UNPACKDIR}</code> nên dùng <code>S = "${UNPACKDIR}"</code>. Hãy xem recipe có sẵn trong bản Yocto của bạn để theo đúng kiểu.</span><span class="en">old Yocto releases (before Honister 3.4) write <code>IMAGE_INSTALL_append</code>. Very recent releases unpack sources into <code>${UNPACKDIR}</code>, so use <code>S = "${UNPACKDIR}"</code>. Look at an existing recipe in your release and follow its style.</span></div>
+</section>
+
+<section class="q" id="q9">
+<h3><span class="n">Q9</span><span><span class="vi">Tích hợp BSP layer cho board mới trong Yocto thế nào? Chỉnh file nào?</span><span class="en">How do you integrate a BSP layer for a new board in Yocto? Which files change?</span></span></h3>
+<div class="vi">
+<p><b>BSP layer</b> (Board Support Package) chứa mọi thứ riêng của phần cứng: cấu hình machine, recipe kernel, U-Boot, device tree, firmware.</p>
+<ol>
+<li>Lấy BSP layer của hãng (ví dụ <code>meta-raspberrypi</code>, <code>meta-ti</code>, <code>meta-freescale</code>), chọn <b>đúng branch</b> trùng với bản Yocto (kirkstone, scarthgap...).</li>
+<li>Thêm layer vào <code>conf/bblayers.conf</code>, kèm các layer mà nó phụ thuộc.</li>
+<li>Đặt <code>MACHINE</code> trong <code>conf/local.conf</code>.</li>
+<li>Nếu là board tự thiết kế: tạo <code>conf/machine/myboard.conf</code> trong layer của bạn, dựa trên machine gần giống nhất.</li>
+<li>Tuỳ biến kernel bằng file <code>.bbappend</code>: thêm device tree, defconfig, patch.</li>
+<li>Build, nạp lên board, kiểm tra qua serial console.</li>
+</ol></div>
+<div class="en">
+<p>A <b>BSP layer</b> (Board Support Package) holds everything specific to the hardware: machine config, kernel recipe, U-Boot, device tree, firmware.</p>
+<ol>
+<li>Get the vendor BSP layer (for example <code>meta-raspberrypi</code>, <code>meta-ti</code>, <code>meta-freescale</code>) on the <b>branch matching</b> your Yocto release (kirkstone, scarthgap...).</li>
+<li>Add the layer to <code>conf/bblayers.conf</code>, along with the layers it depends on.</li>
+<li>Set <code>MACHINE</code> in <code>conf/local.conf</code>.</li>
+<li>For a custom board: create <code>conf/machine/myboard.conf</code> in your own layer, based on the closest existing machine.</li>
+<li>Customise the kernel with a <code>.bbappend</code>: add a device tree, defconfig, patches.</li>
+<li>Build, flash, and check over the serial console.</li>
+</ol></div>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ</span><span class="en">Example</span></p>
+<pre><code><span class="c"># 1) add layers</span>
+$ git clone -b scarthgap https://git.yoctoproject.org/meta-raspberrypi
+$ bitbake-layers add-layer ../meta-raspberrypi
+
+<span class="c"># 2) conf/bblayers.conf now contains</span>
+BBLAYERS ?= " \
+  /work/poky/meta \
+  /work/poky/meta-poky \
+  /work/meta-raspberrypi \
+  /work/meta-mylayer \
+"
+
+<span class="c"># 3) conf/local.conf</span>
+MACHINE = "raspberrypi4-64"
+
+<span class="c"># 4) custom board: meta-mylayer/conf/machine/myboard.conf</span>
+require conf/machine/raspberrypi4-64.conf
+KERNEL_DEVICETREE:append = " broadcom/myboard.dtb"
+SERIAL_CONSOLES = "115200;ttyS0"
+IMAGE_FSTYPES = "wic.bz2"
+
+<span class="c"># 5) meta-mylayer/recipes-kernel/linux/linux-raspberrypi_%.bbappend</span>
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+SRC_URI += "file://can.cfg file://0001-add-myboard-dts.patch"</code></pre></div>
+<div class="tip"><b><span class="vi">Lỗi hay gặp:</span><span class="en">Common error:</span></b> <span class="vi">"layer is not compatible" nghĩa là branch của BSP không khớp bản Yocto. Kiểm tra <code>LAYERSERIES_COMPAT</code> trong <code>conf/layer.conf</code> của layer đó.</span><span class="en">"layer is not compatible" means the BSP branch does not match your Yocto release. Check <code>LAYERSERIES_COMPAT</code> in that layer's <code>conf/layer.conf</code>.</span></div>
+</section>
+
+<section class="q" id="q10">
+<h3><span class="n">Q10</span><span><span class="vi">Khi nào chọn Buildroot thay vì Yocto? Các bước tạo minimal rootfs?</span><span class="en">When to pick Buildroot over Yocto? Steps to make a minimal rootfs?</span></span></h3>
+<div class="tbl"><table>
+<tr><th></th><th>Buildroot</th><th>Yocto</th></tr>
+<tr><td><span class="vi">Độ khó</span><span class="en">Learning curve</span></td><td><span class="vi">Dễ, dùng Makefile + menuconfig</span><span class="en">Easy: Makefiles + menuconfig</span></td><td><span class="vi">Khó hơn, nhiều khái niệm</span><span class="en">Steeper, many concepts</span></td></tr>
+<tr><td><span class="vi">Thời gian build đầu</span><span class="en">First build</span></td><td><span class="vi">Khoảng 30 phút đến 1 giờ</span><span class="en">About 30 minutes to 1 hour</span></td><td><span class="vi">Vài giờ, tốn vài chục GB đĩa</span><span class="en">Several hours, tens of GB of disk</span></td></tr>
+<tr><td><span class="vi">Kết quả</span><span class="en">Output</span></td><td><span class="vi">Một firmware image, không có trình quản lý gói</span><span class="en">One firmware image, no package manager</span></td><td><span class="vi">Một bản distro có package (rpm/ipk/deb), SDK</span><span class="en">A distro with packages (rpm/ipk/deb) and an SDK</span></td></tr>
+<tr><td><span class="vi">Build lại sau khi đổi config</span><span class="en">Rebuild after a config change</span></td><td><span class="vi">Thường phải build lại toàn bộ</span><span class="en">Often a full rebuild</span></td><td><span class="vi">Chỉ build phần thay đổi (sstate cache)</span><span class="en">Only what changed (sstate cache)</span></td></tr>
+<tr><td><span class="vi">Hợp với</span><span class="en">Best for</span></td><td><span class="vi">Thiết bị nhỏ, một chức năng, team nhỏ, làm prototype</span><span class="en">Small single-purpose devices, small teams, prototypes</span></td><td><span class="vi">Sản phẩm lớn, nhiều board, bảo trì lâu dài (IVI, cluster)</span><span class="en">Large products, many boards, long maintenance (IVI, cluster)</span></td></tr>
+</table></div>
+<p><span class="vi"><b>Chọn Buildroot</b> khi flash/RAM rất ít (rootfs vài MB), hệ thống chỉ làm một việc, không cần cập nhật từng package, và cần ra kết quả nhanh. Ví dụ: một gateway CAN nhỏ, một ECU camera chỉ chạy một ứng dụng.</span><span class="en"><b>Pick Buildroot</b> when flash and RAM are tiny (a rootfs of a few MB), the system does one job, you do not need per-package updates, and you need results fast. Examples: a small CAN gateway, a camera ECU that runs one app.</span></p>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ: minimal rootfs bằng Buildroot</span><span class="en">Example: a minimal rootfs with Buildroot</span></p>
+<pre><code>$ git clone https://gitlab.com/buildroot.org/buildroot.git && cd buildroot
+$ make list-defconfigs                 <span class="c"># boards supported out of the box</span>
+$ make raspberrypi4_64_defconfig       <span class="c"># start from your board</span>
+$ make menuconfig
+    Toolchain         → C library: musl or uClibc-ng (smaller than glibc)
+    System config     → Init system: BusyBox; hostname; root password
+    Target packages   → keep BusyBox only, add what you really need
+    Filesystem images → ext4 or squashfs / cpio (initramfs)
+$ make                                 <span class="c"># build everything</span>
+$ ls output/images/
+Image  bcm2711-rpi-4-b.dtb  rootfs.ext4  sdcard.img
+$ sudo dd if=output/images/sdcard.img of=/dev/sdX bs=4M status=progress</code></pre></div>
+<p><span class="vi">Một rootfs tối thiểu chỉ cần: BusyBox (cung cấp <code>init</code>, <code>sh</code> và các lệnh cơ bản), thư viện C, <code>/etc/inittab</code>, và các thư mục <code>/dev</code>, <code>/proc</code>, <code>/sys</code>.</span><span class="en">A minimal rootfs needs only: BusyBox (which provides <code>init</code>, <code>sh</code> and the basic commands), a C library, <code>/etc/inittab</code>, and the <code>/dev</code>, <code>/proc</code>, <code>/sys</code> directories.</span></p>
+</section>
+
+<!-- ============ SECTION 4 ============ -->
+<h2 id="s4">4. Device Driver Development</h2>
+<p class="lo">LO8 – LO10</p>
+
+<section class="q" id="q11">
+<h3><span class="n">Q11</span><span><span class="vi">So sánh character, block, network device. Kernel và userspace nói chuyện với driver qua đâu?</span><span class="en">Character vs block vs network devices. How do kernel and userspace talk to a driver?</span></span></h3>
+<div class="tbl"><table>
+<tr><th></th><th>Character</th><th>Block</th><th>Network</th></tr>
+<tr><td><span class="vi">Dữ liệu</span><span class="en">Data</span></td><td><span class="vi">Dòng byte, tuần tự</span><span class="en">A byte stream, sequential</span></td><td><span class="vi">Khối cố định (512 B, 4 KB), đọc ngẫu nhiên, có cache</span><span class="en">Fixed blocks (512 B, 4 KB), random access, cached</span></td><td><span class="vi">Gói tin (packet / frame)</span><span class="en">Packets / frames</span></td></tr>
+<tr><td><span class="vi">Ví dụ</span><span class="en">Examples</span></td><td>UART, GPIO, I2C, camera <code>/dev/video0</code></td><td>SD, eMMC, SSD</td><td>eth0, wlan0, <b>can0</b></td></tr>
+<tr><td><span class="vi">Có file trong <code>/dev</code>?</span><span class="en">File in <code>/dev</code>?</span></td><td><span class="vi">Có (ký hiệu <code>c</code>)</span><span class="en">Yes (shown as <code>c</code>)</span></td><td><span class="vi">Có (ký hiệu <code>b</code>)</span><span class="en">Yes (shown as <code>b</code>)</span></td><td><span class="vi">Không. Dùng qua socket</span><span class="en">No. Used through sockets</span></td></tr>
+<tr><td><span class="vi">Cấu trúc chính trong kernel</span><span class="en">Main kernel structure</span></td><td><code>file_operations</code></td><td><code>block_device_operations</code> + request queue</td><td><code>net_device_ops</code></td></tr>
+</table></div>
+<div class="vi"><p>Các cơ chế giao tiếp giữa user space và driver:</p>
+<ul>
+<li><b>Device file + system call</b>: <code>open</code>, <code>read</code>, <code>write</code>, <code>close</code> trên <code>/dev/xxx</code>. Driver cung cấp các hàm tương ứng trong <code>file_operations</code>.</li>
+<li><b>ioctl</b>: lệnh điều khiển riêng của thiết bị (ví dụ đặt định dạng camera trong V4L2).</li>
+<li><b>mmap</b>: ánh xạ bộ nhớ của driver vào ứng dụng để khỏi copy (buffer video).</li>
+<li><b>sysfs</b> (<code>/sys</code>): mỗi thuộc tính là một file nhỏ, đọc ghi bằng <code>cat</code>/<code>echo</code>.</li>
+<li><b>procfs, debugfs</b>: thông tin và debug.</li>
+<li><b>Socket / netlink</b>: cho thiết bị mạng, kể cả SocketCAN.</li>
+</ul></div>
+<div class="en"><p>Ways user space and a driver communicate:</p>
+<ul>
+<li><b>Device file + system calls</b>: <code>open</code>, <code>read</code>, <code>write</code>, <code>close</code> on <code>/dev/xxx</code>. The driver supplies the matching functions in <code>file_operations</code>.</li>
+<li><b>ioctl</b>: device-specific control commands (for example setting a camera format in V4L2).</li>
+<li><b>mmap</b>: maps driver memory into the app to avoid copying (video buffers).</li>
+<li><b>sysfs</b> (<code>/sys</code>): each attribute is a small file, read and written with <code>cat</code>/<code>echo</code>.</li>
+<li><b>procfs, debugfs</b>: information and debugging.</li>
+<li><b>Sockets / netlink</b>: for network devices, including SocketCAN.</li>
+</ul></div>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ</span><span class="en">Example</span></p>
+<pre><code>$ ls -l /dev/ttyS0 /dev/mmcblk0 /dev/video0
+crw-rw---- 1 root dialout  4, 64 ... /dev/ttyS0     <span class="c"># c = character, major 4, minor 64</span>
+brw-rw---- 1 root disk   179,  0 ... /dev/mmcblk0   <span class="c"># b = block</span>
+crw-rw---- 1 root video   81,  0 ... /dev/video0
+$ ip link show can0                                 <span class="c"># network device: no /dev file</span>
+$ cat /sys/class/net/can0/operstate                 <span class="c"># sysfs attribute</span></code></pre></div>
+</section>
+
+<section class="q" id="q12">
+<h3><span class="n">Q12</span><span><span class="vi">Viết một kernel module điều khiển GPIO. <code>init</code>/<code>exit</code> và đăng ký thiết bị hoạt động ra sao?</span><span class="en">Write a kernel module that drives a GPIO. How do <code>init</code>/<code>exit</code> and device registration work?</span></span></h3>
+<div class="vi">
+<p>Module dưới đây tạo file <code>/dev/myled</code>. Ghi <code>1</code> thì LED sáng, ghi <code>0</code> thì tắt.</p>
+<ul>
+<li><b><code>init</code></b> chạy khi <code>insmod</code>: xin tài nguyên (GPIO) và <b>đăng ký</b> thiết bị với kernel. Sau bước đăng ký, kernel tạo <code>/dev/myled</code> và biết gọi hàm nào khi ứng dụng <code>write</code>.</li>
+<li><b><code>exit</code></b> chạy khi <code>rmmod</code>: làm ngược lại theo thứ tự ngược. Quên trả tài nguyên là lỗi phổ biến.</li>
+<li><b><code>file_operations</code></b> là bảng nối system call của ứng dụng với hàm trong driver.</li>
+<li><code>copy_from_user</code> là bắt buộc: kernel không được đọc thẳng con trỏ từ user space.</li>
+</ul></div>
+<div class="en">
+<p>The module below creates <code>/dev/myled</code>. Writing <code>1</code> turns the LED on, <code>0</code> turns it off.</p>
+<ul>
+<li><b><code>init</code></b> runs on <code>insmod</code>: it claims resources (the GPIO) and <b>registers</b> the device with the kernel. After registration the kernel creates <code>/dev/myled</code> and knows which function to call when an app does <code>write</code>.</li>
+<li><b><code>exit</code></b> runs on <code>rmmod</code>: it undoes everything in reverse order. Forgetting to release resources is a common bug.</li>
+<li><b><code>file_operations</code></b> is the table linking an app's system calls to driver functions.</li>
+<li><code>copy_from_user</code> is mandatory: the kernel must not read a user-space pointer directly.</li>
+</ul></div>
+<div class="ex"><p class="tag">myled.c</p>
+<pre><code>#include &lt;linux/module.h&gt;
+#include &lt;linux/fs.h&gt;
+#include &lt;linux/miscdevice.h&gt;
+#include &lt;linux/uaccess.h&gt;
+#include &lt;linux/gpio.h&gt;
+
+#define LED_GPIO 17                 <span class="c">/* change to your board's GPIO number */</span>
+
+<span class="c">/* called when user space does write() on /dev/myled */</span>
+static ssize_t led_write(struct file *f, const char __user *buf,
+                         size_t len, loff_t *off)
+{
+    char c;
+
+    if (len &lt; 1)
+        return 0;
+    if (copy_from_user(&amp;c, buf, 1))     <span class="c">/* safely copy 1 byte from the app */</span>
+        return -EFAULT;
+
+    if (c == '1')
+        gpio_set_value(LED_GPIO, 1);
+    else if (c == '0')
+        gpio_set_value(LED_GPIO, 0);
+    return len;                          <span class="c">/* tell the app all bytes were used */</span>
+}
+
+static const struct file_operations led_fops = {
+    .owner = THIS_MODULE,
+    .write = led_write,
+};
+
+static struct miscdevice led_dev = {
+    .minor = MISC_DYNAMIC_MINOR,         <span class="c">/* kernel picks a free minor number */</span>
+    .name  = "myled",                    <span class="c">/* becomes /dev/myled */</span>
+    .fops  = &amp;led_fops,
+};
+
+static int __init led_init(void)
+{
+    int ret;
+
+    ret = gpio_request(LED_GPIO, "myled");      <span class="c">/* 1. claim the pin */</span>
+    if (ret)
+        return ret;
+    gpio_direction_output(LED_GPIO, 0);         <span class="c">/* 2. output, start low */</span>
+
+    ret = misc_register(&amp;led_dev);              <span class="c">/* 3. register → /dev/myled */</span>
+    if (ret) {
+        gpio_free(LED_GPIO);                    <span class="c">/* undo step 1 on failure */</span>
+        return ret;
+    }
+    pr_info("myled: loaded\n");
+    return 0;
+}
+
+static void __exit led_exit(void)
+{
+    misc_deregister(&amp;led_dev);                  <span class="c">/* reverse order of init */</span>
+    gpio_set_value(LED_GPIO, 0);
+    gpio_free(LED_GPIO);
+    pr_info("myled: unloaded\n");
+}
+
+module_init(led_init);
+module_exit(led_exit);
+MODULE_LICENSE("GPL");
+MODULE_DESCRIPTION("Simple GPIO LED driver");</code></pre>
+<p class="tag"><span class="vi">Makefile và chạy thử</span><span class="en">Makefile and test</span></p>
+<pre><code>obj-m += myled.o
+all:
+	make -C $(KDIR) M=$(PWD) ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- modules
+
+<span class="c"># on the board</span>
+# insmod myled.ko
+# dmesg | tail -1          → myled: loaded
+# echo 1 > /dev/myled      → LED on
+# echo 0 > /dev/myled      → LED off
+# rmmod myled</code></pre></div>
+<div class="tip"><b><span class="vi">Lưu ý:</span><span class="en">Notes:</span></b> <span class="vi">ví dụ dùng API GPIO theo số (<code>gpio_request</code>) vì ngắn và dễ hiểu, nhưng API này đã cũ. Trên kernel mới, số GPIO thường không trùng số chân (xem <code>/sys/kernel/debug/gpio</code>). Cách chuẩn hiện nay là khai báo chân trong device tree, viết platform driver và dùng <code>gpiod_get()</code>, <code>gpiod_set_value()</code>. Với I2C/SPI, mô hình tương tự: khai báo <code>struct i2c_driver</code> có hàm <code>probe</code>/<code>remove</code> rồi đăng ký bằng <code>module_i2c_driver()</code>; kernel gọi <code>probe</code> khi thấy thiết bị khớp trong device tree.</span><span class="en">the example uses the number-based GPIO API (<code>gpio_request</code>) because it is short and clear, but that API is legacy. On recent kernels the GPIO number often differs from the pin number (see <code>/sys/kernel/debug/gpio</code>). The current standard is to declare the pin in the device tree, write a platform driver and use <code>gpiod_get()</code>, <code>gpiod_set_value()</code>. I2C/SPI follow the same model: declare a <code>struct i2c_driver</code> with <code>probe</code>/<code>remove</code> and register it with <code>module_i2c_driver()</code>; the kernel calls <code>probe</code> when a matching device appears in the device tree.</span></div>
+</section>
+
+<section class="q" id="q13">
+<h3><span class="n">Q13</span><span><span class="vi">Module load bị lỗi hoặc gây kernel panic. Dùng <code>dmesg</code>, <code>printk</code>, <code>ftrace</code> thế nào?</span><span class="en">A module fails to load or panics the kernel. How do you use <code>dmesg</code>, <code>printk</code> and <code>ftrace</code>?</span></span></h3>
+<div class="vi">
+<p><b>Bước 1, <code>dmesg</code>: đọc kernel nói gì.</b> Mở <code>dmesg -w</code> ở một terminal rồi mới <code>insmod</code>.</p>
+<div class="tbl"><table>
+<tr><th>Thông báo</th><th>Ý nghĩa</th></tr>
+<tr><td><code>Unknown symbol xxx</code></td><td>Module dùng hàm chưa có; cần load module khác trước hoặc bật config.</td></tr>
+<tr><td><code>version magic ... should be ...</code> / <code>Invalid module format</code></td><td>Module build cho bản kernel khác với kernel đang chạy.</td></tr>
+<tr><td><code>Exec format error</code></td><td>Sai kiến trúc (build cho x86 nhưng chạy trên ARM).</td></tr>
+<tr><td><code>Unable to handle kernel NULL pointer dereference</code></td><td>Oops: dùng con trỏ NULL. Đọc dòng <code>pc :</code> và <code>Call trace</code>.</td></tr>
+</table></div>
+<p><b>Bước 2, <code>printk</code>: đánh dấu đường đi.</b> Thêm <code>pr_info()</code> ở đầu mỗi hàm và sau mỗi bước trong <code>init</code>. Dòng cuối cùng in ra được cho biết lỗi nằm ngay sau đó. Dùng <code>pr_err</code> cho lỗi, <code>pr_debug</code>/<code>dev_dbg</code> cho chi tiết.</p>
+<p><b>Bước 3, <code>ftrace</code>: xem kernel thực sự gọi hàm nào.</b> Hữu ích khi không có thông báo lỗi nhưng hành vi sai, ví dụ <code>probe</code> không được gọi, hoặc cần đo một hàm chạy bao lâu.</p>
+</div>
+<div class="en">
+<p><b>Step 1, <code>dmesg</code>: read what the kernel says.</b> Open <code>dmesg -w</code> in one terminal before running <code>insmod</code>.</p>
+<div class="tbl"><table>
+<tr><th>Message</th><th>Meaning</th></tr>
+<tr><td><code>Unknown symbol xxx</code></td><td>The module uses a function that is not present; load another module first or enable a config.</td></tr>
+<tr><td><code>version magic ... should be ...</code> / <code>Invalid module format</code></td><td>The module was built for a different kernel than the one running.</td></tr>
+<tr><td><code>Exec format error</code></td><td>Wrong architecture (built for x86, running on ARM).</td></tr>
+<tr><td><code>Unable to handle kernel NULL pointer dereference</code></td><td>An Oops: a NULL pointer was used. Read the <code>pc :</code> line and the <code>Call trace</code>.</td></tr>
+</table></div>
+<p><b>Step 2, <code>printk</code>: mark the path.</b> Add <code>pr_info()</code> at the start of each function and after each step in <code>init</code>. The last line that prints tells you the fault is right after it. Use <code>pr_err</code> for errors and <code>pr_debug</code>/<code>dev_dbg</code> for detail.</p>
+<p><b>Step 3, <code>ftrace</code>: see which functions the kernel really calls.</b> Useful when there is no error message but behaviour is wrong, for example <code>probe</code> is never called, or you need to time a function.</p>
+</div>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ: đọc một Oops</span><span class="en">Example: reading an Oops</span></p>
+<pre><code>[  52.31] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+[  52.33] pc : led_write+0x24/0x70 [myled]          <span class="c"># function + offset, in module myled</span>
+[  52.35] Call trace:
+[  52.35]  led_write+0x24/0x70 [myled]
+[  52.36]  vfs_write+0xc8/0x2c0                     <span class="c"># who called it</span>
+[  52.36]  ksys_write+0x74/0x100
+
+<span class="c"># turn "led_write+0x24" into a source line (module built with -g)</span>
+$ aarch64-linux-gnu-gdb myled.ko
+(gdb) list *(led_write+0x24)
+0x24 is in led_write (myled.c:21).</code></pre>
+<p class="tag">ftrace</p>
+<pre><code># cd /sys/kernel/tracing                  <span class="c"># older: /sys/kernel/debug/tracing</span>
+# echo ':mod:myled' > set_ftrace_filter   <span class="c"># only functions of my module</span>
+# echo function_graph > current_tracer
+# echo 1 > tracing_on
+# echo 1 > /dev/myled                     <span class="c"># trigger the code</span>
+# echo 0 > tracing_on
+# cat trace
+ 0)               |  led_write [myled]() {
+ 0)   1.250 us    |    gpio_set_value();
+ 0)   4.900 us    |  }</code></pre></div>
+<div class="tip"><b><span class="vi">Mẹo:</span><span class="en">Tip:</span></b> <span class="vi">nếu panic làm mất log, hãy xem qua serial console thay vì SSH, vì serial vẫn in được đến dòng cuối cùng.</span><span class="en">if a panic takes the log with it, watch over the serial console rather than SSH, because serial still prints up to the last line.</span></div>
+</section>
+
+<!-- ============ SECTION 5 ============ -->
+<h2 id="s5">5. Automotive Protocols (CAN Bus)</h2>
+<p class="lo">LO11, LO12</p>
+
+<section class="q" id="q14">
+<h3><span class="n">Q14</span><span><span class="vi">Cấu trúc CAN frame, cơ chế arbitration và error handling</span><span class="en">CAN frame structure, arbitration and error handling</span></span></h3>
+<p><span class="vi">CAN là bus mà mọi ECU cùng nối vào hai dây CAN_H và CAN_L. Không có địa chỉ người nhận: mỗi frame mang một <b>ID</b> nói lên <i>nội dung</i> (ví dụ 0x0C4 = tốc độ động cơ), ECU nào quan tâm thì nhận.</span><span class="en">CAN is a bus where every ECU shares two wires, CAN_H and CAN_L. There is no destination address: each frame carries an <b>ID</b> that names its <i>content</i> (for example 0x0C4 = engine speed), and any ECU that cares picks it up.</span></p>
+<div class="flow"><span>SOF 1</span><span>ID 11</span><span>RTR 1</span><span>IDE 1</span><span>r0 1</span><span>DLC 4</span><span>DATA 0–64</span><span>CRC 15+1</span><span>ACK 1+1</span><span>EOF 7</span></div>
+<div class="tbl"><table>
+<tr><th><span class="vi">Trường</span><span class="en">Field</span></th><th><span class="vi">Ý nghĩa</span><span class="en">Meaning</span></th></tr>
+<tr><td>SOF</td><td><span class="vi">1 bit dominant báo bắt đầu frame</span><span class="en">One dominant bit marking frame start</span></td></tr>
+<tr><td>ID</td><td><span class="vi">11 bit (standard) hoặc 29 bit (extended). Vừa là tên dữ liệu, vừa là độ ưu tiên</span><span class="en">11 bits (standard) or 29 bits (extended). Both the data name and the priority</span></td></tr>
+<tr><td>RTR / IDE</td><td><span class="vi">RTR: frame dữ liệu hay frame yêu cầu. IDE: ID 11 hay 29 bit</span><span class="en">RTR: data or remote frame. IDE: 11- or 29-bit ID</span></td></tr>
+<tr><td>DLC</td><td><span class="vi">Số byte dữ liệu (0 đến 8)</span><span class="en">Number of data bytes (0 to 8)</span></td></tr>
+<tr><td>DATA</td><td><span class="vi">0 đến 8 byte (CAN FD: tới 64 byte)</span><span class="en">0 to 8 bytes (CAN FD: up to 64)</span></td></tr>
+<tr><td>CRC</td><td><span class="vi">Mã kiểm tra lỗi</span><span class="en">Checksum for error detection</span></td></tr>
+<tr><td>ACK</td><td><span class="vi">Node gửi để recessive; bất kỳ node nào nhận đúng sẽ kéo xuống dominant</span><span class="en">The sender leaves it recessive; any node that received correctly pulls it dominant</span></td></tr>
+</table></div>
+<div class="vi">
+<p><b>Arbitration.</b> Bus có hai mức: <b>dominant (0)</b> và <b>recessive (1)</b>. Nếu một node gửi 0 và node khác gửi 1 cùng lúc, bus sẽ là 0. Mỗi node vừa gửi vừa đọc lại bus. Node nào gửi 1 mà đọc thấy 0 thì biết mình thua, lập tức dừng và chờ lượt sau. Hệ quả: <b>ID nhỏ hơn có ưu tiên cao hơn</b>, và frame thắng không bị hỏng, không mất thời gian.</p>
+<p><b>Error handling.</b> Có 5 loại lỗi: bit error, stuff error (quá 5 bit giống nhau liên tiếp), CRC error, form error, ACK error. Node phát hiện lỗi sẽ gửi <b>error frame</b> để huỷ frame đó, node gửi tự gửi lại. Mỗi node có hai bộ đếm: TEC (lỗi khi gửi) và REC (lỗi khi nhận).</p>
+</div>
+<div class="en">
+<p><b>Arbitration.</b> The bus has two levels: <b>dominant (0)</b> and <b>recessive (1)</b>. If one node sends 0 while another sends 1, the bus reads 0. Every node reads the bus back while sending. A node that sends 1 but reads 0 knows it lost, stops at once and waits for the next slot. The result: <b>the lower ID has higher priority</b>, and the winning frame is not damaged and loses no time.</p>
+<p><b>Error handling.</b> There are 5 error types: bit error, stuff error (more than 5 equal bits in a row), CRC error, form error, ACK error. A node that detects one sends an <b>error frame</b> to cancel that frame, and the sender retransmits automatically. Each node keeps two counters: TEC (transmit errors) and REC (receive errors).</p>
+</div>
+<div class="tbl"><table>
+<tr><th><span class="vi">Trạng thái</span><span class="en">State</span></th><th><span class="vi">Điều kiện</span><span class="en">Condition</span></th><th><span class="vi">Hành vi</span><span class="en">Behaviour</span></th></tr>
+<tr><td>Error Active</td><td>TEC, REC &lt; 128</td><td><span class="vi">Bình thường, gửi error frame chủ động</span><span class="en">Normal; sends active error frames</span></td></tr>
+<tr><td>Error Passive</td><td>TEC <span class="vi">hoặc</span><span class="en">or</span> REC ≥ 128</td><td><span class="vi">Vẫn gửi nhận, nhưng không được phá frame của node khác</span><span class="en">Still sends and receives, but may not destroy other nodes' frames</span></td></tr>
+<tr><td>Bus Off</td><td>TEC &gt; 255</td><td><span class="vi">Tự ngắt khỏi bus để không làm hỏng mạng; cần restart</span><span class="en">Disconnects itself to protect the network; needs a restart</span></td></tr>
+</table></div>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ: 0x100 và 0x200 gửi cùng lúc</span><span class="en">Example: 0x100 and 0x200 start together</span></p>
+<pre><code>bit position   10  9  8  7 ...
+ECU A (0x100)   0  0  1  0 ...
+ECU B (0x200)   0  1               <span class="c"># B sends 1 (recessive)</span>
+bus             0  0  1  0 ...     <span class="c"># bus shows 0 → B lost, stops; A continues</span></code></pre></div>
+</section>
+
+<section class="q" id="q15">
+<h3><span class="n">Q15</span><span><span class="vi">Cấu hình SocketCAN (<code>can0</code>, bitrate) và dùng <code>can-utils</code> gửi/nhận frame</span><span class="en">Configuring SocketCAN (<code>can0</code>, bitrate) and sending/receiving with <code>can-utils</code></span></span></h3>
+<p><span class="vi"><b>SocketCAN</b> biến CAN thành một network interface của Linux, giống <code>eth0</code>. Vì vậy bạn cấu hình bằng lệnh <code>ip</code> và lập trình bằng socket. Mọi node trên bus phải dùng <b>cùng bitrate</b>.</span><span class="en"><b>SocketCAN</b> presents CAN as a Linux network interface, like <code>eth0</code>. So you configure it with <code>ip</code> and program it with sockets. Every node on the bus must use the <b>same bitrate</b>.</span></p>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ: CAN thật</span><span class="en">Example: real CAN</span></p>
+<pre><code># ip link set can0 down                           <span class="c"># must be down to change settings</span>
+# ip link set can0 type can bitrate 500000        <span class="c"># 500 kbit/s</span>
+# ip link set can0 up
+# ip -details -statistics link show can0          <span class="c"># state, bitrate, error counters</span>
+
+# candump can0                                    <span class="c"># terminal 1: receive everything</span>
+# cansend can0 123#DEADBEEF                       <span class="c"># terminal 2: ID 0x123, 4 data bytes</span>
+
+  can0  123   [4]  DE AD BE EF                    <span class="c"># what candump prints</span></code></pre>
+<p class="tag"><span class="vi">Ví dụ: tập luyện không cần phần cứng (vcan)</span><span class="en">Example: practice without hardware (vcan)</span></p>
+<pre><code># modprobe vcan
+# ip link add dev vcan0 type vcan
+# ip link set vcan0 up
+# candump vcan0 &
+# cansend vcan0 0C4#1122334455667788</code></pre></div>
+<div class="tbl"><table>
+<tr><th><span class="vi">Lệnh</span><span class="en">Command</span></th><th><span class="vi">Công dụng</span><span class="en">Purpose</span></th></tr>
+<tr><td><code>candump can0,123:7FF</code></td><td><span class="vi">Chỉ nhận ID 0x123 (id:mask)</span><span class="en">Receive only ID 0x123 (id:mask)</span></td></tr>
+<tr><td><code>candump -l can0</code></td><td><span class="vi">Ghi log ra file</span><span class="en">Log to a file</span></td></tr>
+<tr><td><code>canplayer -I file.log</code></td><td><span class="vi">Phát lại log</span><span class="en">Replay a log</span></td></tr>
+<tr><td><code>cangen can0</code></td><td><span class="vi">Sinh frame ngẫu nhiên để test tải</span><span class="en">Generate random frames for load tests</span></td></tr>
+<tr><td><code>cansniffer can0</code></td><td><span class="vi">Xem byte nào đang thay đổi</span><span class="en">See which bytes are changing</span></td></tr>
+<tr><td><code>cansend can0 12345678#11</code></td><td><span class="vi">ID 8 chữ số hex = extended frame 29 bit</span><span class="en">An 8-hex-digit ID = 29-bit extended frame</span></td></tr>
+</table></div>
+<div class="tip"><b><span class="vi">Lưu ý:</span><span class="en">Note:</span></b> <span class="vi">nếu trên bus chỉ có một mình bạn, <code>cansend</code> sẽ không thành công vì không ai ACK. Cần ít nhất hai node, hoặc dùng <code>vcan</code>, hoặc bật <code>loopback on</code> để tự test.</span><span class="en">if you are alone on the bus, <code>cansend</code> will not succeed because nobody ACKs. You need at least two nodes, or <code>vcan</code>, or <code>loopback on</code> for a self-test.</span></div>
+</section>
+
+<section class="q" id="q16">
+<h3><span class="n">Q16</span><span><span class="vi">Hai ECU gửi cùng lúc, hoặc bus báo lỗi nhiều. Phân tích và xử lý ra sao?</span><span class="en">Two ECUs transmit together, or the bus reports many errors. How do you analyse and fix it?</span></span></h3>
+<div class="vi">
+<p><b>Hai ECU gửi cùng lúc là chuyện bình thường</b>, không phải lỗi. Arbitration (Q14) giải quyết: ID nhỏ thắng, bên thua tự gửi lại ngay sau đó. Chỉ có vấn đề trong hai trường hợp:</p>
+<ul>
+<li>Hai ECU dùng <b>cùng một ID</b> nhưng dữ liệu khác nhau. Arbitration hoà, đến phần data thì xung đột và sinh bit error. Cách sửa: mỗi ID chỉ thuộc về một ECU (kiểm tra file DBC).</li>
+<li>Frame ID lớn bị <b>chờ mãi</b> vì bus quá tải. Đo bằng <code>canbusload</code>, giảm tần suất gửi hoặc đổi ID quan trọng thành nhỏ hơn.</li>
+</ul>
+<p><b>Bus báo lỗi nhiều.</b> Kiểm tra từ lớp vật lý trở lên:</p>
+<ol>
+<li><b>Bitrate</b> của mọi node có giống nhau không? Đây là nguyên nhân số một.</li>
+<li><b>Điện trở đầu cuối</b>: phải có 120 Ω ở <i>hai đầu</i> bus. Tắt nguồn, đo giữa CAN_H và CAN_L phải ra khoảng 60 Ω.</li>
+<li><b>Dây</b>: CAN_H/CAN_L có bị đảo, đứt, chạm mass không? Các node có chung GND không?</li>
+<li><b>Bộ đếm lỗi và trạng thái</b>: dùng lệnh bên dưới để xem node đang Error Active, Passive hay Bus Off.</li>
+<li><b>Xem error frame</b> để biết loại lỗi (ACK, bit, stuff...).</li>
+<li>Rút từng ECU ra để tìm node gây nhiễu. Dùng oscilloscope xem dạng sóng nếu cần.</li>
+</ol></div>
+<div class="en">
+<p><b>Two ECUs transmitting at once is normal</b>, not a fault. Arbitration (Q14) settles it: the lower ID wins and the loser retries right after. It is a problem only in two cases:</p>
+<ul>
+<li>Two ECUs use the <b>same ID</b> with different data. Arbitration ties, then the data fields collide and cause bit errors. Fix: each ID belongs to exactly one ECU (check the DBC file).</li>
+<li>A high-ID frame <b>waits forever</b> because the bus is overloaded. Measure with <code>canbusload</code>, lower the send rate, or give important messages lower IDs.</li>
+</ul>
+<p><b>Many bus errors.</b> Check from the physical layer up:</p>
+<ol>
+<li>Is the <b>bitrate</b> the same on every node? This is the number one cause.</li>
+<li><b>Termination</b>: there must be 120 Ω at <i>both ends</i> of the bus. With power off, measuring between CAN_H and CAN_L should give about 60 Ω.</li>
+<li><b>Wiring</b>: are CAN_H/CAN_L swapped, broken or shorted? Do the nodes share ground?</li>
+<li><b>Error counters and state</b>: use the commands below to see whether the node is Error Active, Passive or Bus Off.</li>
+<li><b>Watch the error frames</b> to learn the error type (ACK, bit, stuff...).</li>
+<li>Unplug ECUs one at a time to find the one disturbing the bus. Use an oscilloscope on the waveform if needed.</li>
+</ol></div>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ</span><span class="en">Example</span></p>
+<pre><code># ip -details -statistics link show can0
+    can state ERROR-PASSIVE (berr-counter tx 128 rx 0) restart-ms 0
+    bitrate 500000 sample-point 0.875
+    re-started bus-errors arbit-lost error-warn error-pass bus-off
+    0          153        0          1          1          0
+
+# candump -e can0,0:0,#FFFFFFFF          <span class="c"># show error frames too</span>
+  can0  20000004  [8] 00 20 00 00 00 00 80 00   ERRORFRAME
+        controller-problem{tx-error-passive}
+
+# canbusload can0@500000                 <span class="c"># bus load in percent</span>
+
+<span class="c"># recover from bus-off</span>
+# ip link set can0 type can restart              <span class="c"># once, by hand</span>
+# ip link set can0 type can restart-ms 100       <span class="c"># automatic, after 100 ms (set while down)</span></code></pre></div>
+<div class="tip"><b><span class="vi">Đọc nhanh:</span><span class="en">Quick read:</span></b> <span class="vi">TX tăng còn RX bằng 0 thường là <b>không ai ACK</b> (chỉ có một node, sai bitrate, hoặc đứt dây). Tự động restart chỉ che triệu chứng; vẫn phải tìm nguyên nhân gốc.</span><span class="en">TX counter rising while RX stays 0 usually means <b>nobody ACKs</b> (a lone node, wrong bitrate, or a broken wire). Auto-restart only hides the symptom; you still need the root cause.</span></div>
+</section>
+
+<!-- ============ SECTION 6 ============ -->
+<h2 id="s6">6. V4L2 / GStreamer</h2>
+<p class="lo">LO13 – LO15</p>
+
+<section class="q" id="q17">
+<h3><span class="n">Q17</span><span><span class="vi">Kiểm tra camera <code>/dev/video*</code> và định dạng hỗ trợ. V4L2 hoạt động theo luồng nào?</span><span class="en">Checking a camera at <code>/dev/video*</code> and its formats. What is the V4L2 flow?</span></span></h3>
+<p><span class="vi"><b>V4L2</b> (Video for Linux 2) là giao diện chuẩn của kernel cho camera. Mỗi camera hiện ra là một character device <code>/dev/videoN</code>, điều khiển bằng <code>ioctl</code>.</span><span class="en"><b>V4L2</b> (Video for Linux 2) is the kernel's standard interface for cameras. Each camera appears as a character device <code>/dev/videoN</code>, controlled with <code>ioctl</code>.</span></p>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ: kiểm tra camera</span><span class="en">Example: inspecting a camera</span></p>
+<pre><code>$ v4l2-ctl --list-devices
+USB Camera (usb-0000:00:14.0-1):
+        /dev/video0                      <span class="c"># video capture</span>
+        /dev/video1                      <span class="c"># metadata node, not video</span>
+
+$ v4l2-ctl -d /dev/video0 --list-formats-ext
+        [0]: 'MJPG' (Motion-JPEG, compressed)
+                Size: Discrete 1280x720
+                        Interval: Discrete 0.033s (30.000 fps)
+        [1]: 'YUYV' (YUYV 4:2:2)
+                Size: Discrete 640x480
+                        Interval: Discrete 0.033s (30.000 fps)
+
+$ v4l2-ctl -d /dev/video0 --all          <span class="c"># driver, current format, controls</span>
+$ v4l2-ctl -d /dev/video0 --list-ctrls   <span class="c"># brightness, exposure...</span>
+
+<span class="c"># grab one raw frame to prove capture works</span>
+$ v4l2-ctl -d /dev/video0 --set-fmt-video=width=640,height=480,pixelformat=YUYV \
+           --stream-mmap --stream-count=1 --stream-to=frame.raw</code></pre></div>
+<p><span class="vi">Luồng hoạt động của một ứng dụng V4L2. Ý chính: ứng dụng và driver <b>chuyền tay nhau các buffer</b>. Ứng dụng đưa buffer rỗng vào hàng đợi (QBUF), driver đổ đầy ảnh, ứng dụng lấy ra (DQBUF), xử lý xong lại trả về.</span><span class="en">The flow of a V4L2 application. The key idea: the app and the driver <b>pass buffers back and forth</b>. The app queues an empty buffer (QBUF), the driver fills it with an image, the app takes it out (DQBUF), processes it and hands it back.</span></p>
+<div class="tbl"><table>
+<tr><th>#</th><th><span class="vi">Lời gọi</span><span class="en">Call</span></th><th><span class="vi">Việc làm</span><span class="en">What it does</span></th></tr>
+<tr><td>1</td><td><code>open("/dev/video0")</code></td><td><span class="vi">Mở thiết bị</span><span class="en">Open the device</span></td></tr>
+<tr><td>2</td><td><code>VIDIOC_QUERYCAP</code></td><td><span class="vi">Hỏi khả năng: có capture, có streaming không</span><span class="en">Ask capabilities: capture? streaming?</span></td></tr>
+<tr><td>3</td><td><code>VIDIOC_S_FMT</code></td><td><span class="vi">Đặt độ phân giải và pixel format</span><span class="en">Set resolution and pixel format</span></td></tr>
+<tr><td>4</td><td><code>VIDIOC_REQBUFS</code></td><td><span class="vi">Xin driver cấp N buffer (thường 4)</span><span class="en">Ask the driver for N buffers (often 4)</span></td></tr>
+<tr><td>5</td><td><code>VIDIOC_QUERYBUF</code> + <code>mmap</code></td><td><span class="vi">Ánh xạ buffer vào ứng dụng, không cần copy</span><span class="en">Map the buffers into the app, no copying</span></td></tr>
+<tr><td>6</td><td><code>VIDIOC_QBUF</code></td><td><span class="vi">Đưa các buffer rỗng vào hàng đợi</span><span class="en">Queue the empty buffers</span></td></tr>
+<tr><td>7</td><td><code>VIDIOC_STREAMON</code></td><td><span class="vi">Bắt đầu capture</span><span class="en">Start capturing</span></td></tr>
+<tr><td>8</td><td><code>poll</code> → <code>VIDIOC_DQBUF</code> → <span class="vi">xử lý</span><span class="en">process</span> → <code>VIDIOC_QBUF</code></td><td><span class="vi">Vòng lặp: chờ frame, lấy ra, dùng, trả lại</span><span class="en">The loop: wait for a frame, take it, use it, return it</span></td></tr>
+<tr><td>9</td><td><code>VIDIOC_STREAMOFF</code>, <code>munmap</code>, <code>close</code></td><td><span class="vi">Dừng và dọn dẹp</span><span class="en">Stop and clean up</span></td></tr>
+</table></div>
+</section>
+
+<section class="q" id="q18">
+<h3><span class="n">Q18</span><span><span class="vi">Viết GStreamer pipeline capture, xử lý và hiển thị video từ camera. Vai trò từng element?</span><span class="en">Write a GStreamer pipeline to capture, process and display camera video. What does each element do?</span></span></h3>
+<p><span class="vi">GStreamer giống một dây chuyền: mỗi <b>element</b> làm một việc, nối với nhau bằng dấu <code>!</code>. Dữ liệu chảy từ <b>source</b> qua các <b>filter</b> tới <b>sink</b>.</span><span class="en">GStreamer works like an assembly line: each <b>element</b> does one job, and elements are joined with <code>!</code>. Data flows from a <b>source</b> through <b>filters</b> to a <b>sink</b>.</span></p>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ</span><span class="en">Example</span></p>
+<pre><code>gst-launch-1.0 v4l2src device=/dev/video0 \
+  ! video/x-raw,width=640,height=480,framerate=30/1 \
+  ! videoconvert \
+  ! videoflip method=horizontal-flip \
+  ! videoscale ! video/x-raw,width=1280,height=720 \
+  ! autovideosink sync=false</code></pre></div>
+<div class="tbl"><table>
+<tr><th>Element</th><th><span class="vi">Vai trò</span><span class="en">Role</span></th></tr>
+<tr><td><code>v4l2src</code></td><td><span class="vi">Source. Đọc frame từ camera qua V4L2 (làm hết các bước ở Q17 giúp bạn).</span><span class="en">Source. Reads frames from the camera through V4L2 (it does all the Q17 steps for you).</span></td></tr>
+<tr><td><code>video/x-raw,...</code></td><td><span class="vi">Caps filter. Không xử lý gì, chỉ <i>yêu cầu</i> định dạng: kích thước, fps. Phải là định dạng camera hỗ trợ.</span><span class="en">Caps filter. It processes nothing; it only <i>requests</i> a format: size, fps. It must be one the camera supports.</span></td></tr>
+<tr><td><code>videoconvert</code></td><td><span class="vi">Đổi không gian màu (ví dụ YUYV sang định dạng màn hình cần).</span><span class="en">Converts colour space (for example YUYV to what the display needs).</span></td></tr>
+<tr><td><code>videoflip</code></td><td><span class="vi">Lật ảnh. Camera lùi cần lật ngang để giống gương chiếu hậu.</span><span class="en">Flips the image. A rear camera needs a horizontal flip to look like a mirror.</span></td></tr>
+<tr><td><code>videoscale</code> + caps</td><td><span class="vi">Đổi kích thước cho vừa màn hình.</span><span class="en">Resizes to fit the screen.</span></td></tr>
+<tr><td><code>autovideosink</code></td><td><span class="vi">Sink. Tự chọn cách hiển thị phù hợp. <code>sync=false</code>: hiện ngay khi có frame, giảm trễ.</span><span class="en">Sink. Picks a suitable display method. <code>sync=false</code>: show frames as soon as they arrive, cutting delay.</span></td></tr>
+</table></div>
+<div class="ex"><p class="tag"><span class="vi">Biến thể: camera MJPEG và chạy từ code C</span><span class="en">Variants: MJPEG camera, and running from C</span></p>
+<pre><code><span class="c"># camera that outputs compressed MJPEG needs a decoder</span>
+gst-launch-1.0 v4l2src device=/dev/video0 \
+  ! image/jpeg,width=1280,height=720,framerate=30/1 \
+  ! jpegdec ! videoconvert ! autovideosink sync=false
+
+<span class="c"># debugging: -v prints the negotiated caps</span>
+gst-launch-1.0 -v v4l2src ! videoconvert ! fakesink</code></pre>
+<pre><code>#include &lt;gst/gst.h&gt;
+
+int main(int argc, char *argv[])
+{
+    GstElement *pipeline;
+    GstBus *bus;
+    GstMessage *msg;
+
+    gst_init(&amp;argc, &amp;argv);
+
+    <span class="c">/* same text as the gst-launch command line */</span>
+    pipeline = gst_parse_launch(
+        "v4l2src device=/dev/video0 ! videoconvert ! autovideosink sync=false",
+        NULL);
+
+    gst_element_set_state(pipeline, GST_STATE_PLAYING);
+
+    <span class="c">/* block here until an error or end-of-stream */</span>
+    bus = gst_element_get_bus(pipeline);
+    msg = gst_bus_timed_pop_filtered(bus, GST_CLOCK_TIME_NONE,
+                                     GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
+
+    if (msg != NULL)
+        gst_message_unref(msg);
+    gst_object_unref(bus);
+    gst_element_set_state(pipeline, GST_STATE_NULL);
+    gst_object_unref(pipeline);
+    return 0;
+}
+<span class="c">/* build: gcc cam.c -o cam $(pkg-config --cflags --libs gstreamer-1.0) */</span></code></pre></div>
+<div class="tip"><b><span class="vi">Lỗi hay gặp:</span><span class="en">Common error:</span></b> <span class="vi">"not-negotiated" nghĩa là caps bạn yêu cầu không khớp với camera. So lại với kết quả <code>v4l2-ctl --list-formats-ext</code>.</span><span class="en">"not-negotiated" means the caps you asked for do not match the camera. Compare with the output of <code>v4l2-ctl --list-formats-ext</code>.</span></div>
+</section>
+
+<section class="q" id="q19">
+<h3><span class="n">Q19</span><span><span class="vi">Thiết kế camera lùi / camera 360 bằng V4L2 và GStreamer. Xử lý độ trễ và mất frame thế nào?</span><span class="en">Design a rear-view / 360° camera with V4L2 and GStreamer. How do you handle latency and dropped frames?</span></span></h3>
+<p><b><span class="vi">Kiến trúc tổng thể</span><span class="en">Overall architecture</span></b></p>
+<div class="flow"><span>Camera sensor</span><i>→</i><span>CSI / SerDes</span><i>→</i><span>V4L2 driver</span><i>→</i><span>GStreamer</span><i>→</i><span>GPU / compositor</span><i>→</i><span>Display</span></div>
+<div class="flow"><span>CAN: gear = R</span><i>→</i><span>camera service</span><i>→</i><span><span class="vi">hiện / ẩn video</span><span class="en">show / hide video</span></span></div>
+<div class="vi">
+<ul>
+<li><b>Camera lùi:</b> một camera. Một service nghe CAN (SocketCAN); khi thấy tín hiệu số lùi thì đưa video lên trên cùng màn hình, kèm đường gióng (overlay). Ảnh phải lật ngang.</li>
+<li><b>Camera 360:</b> bốn camera mắt cá (trước, sau, trái, phải). Mỗi ảnh cần: hiệu chỉnh méo, chiếu thành góc nhìn từ trên xuống, rồi ghép lại quanh hình chiếc xe. Phần này nặng nên làm trên GPU (OpenGL), và bốn camera phải đồng bộ thời gian.</li>
+<li><b>Khởi động sớm:</b> camera lùi phải hiện rất nhanh sau khi vào số lùi (quy định Mỹ FMVSS 111 yêu cầu trong 2 giây). Vì vậy service camera khởi động từ rất sớm trong quá trình boot, không chờ toàn bộ giao diện.</li>
+</ul>
+<p><b>Giảm độ trễ</b></p>
+<ul>
+<li>Không nén, không giải nén: dùng định dạng raw (YUYV, NV12), tránh MJPEG/H.264 trên đường hiển thị.</li>
+<li>Không copy: dùng DMABUF để camera, GPU và màn hình dùng chung một buffer.</li>
+<li>Dùng phần cứng để đổi màu và scale thay cho <code>videoconvert</code> chạy trên CPU.</li>
+<li>Sink đặt <code>sync=false</code>; hàng đợi nhỏ và <code>leaky</code> để <b>bỏ frame cũ</b> thay vì dồn lại. Với camera lùi, ảnh mới quan trọng hơn ảnh đủ.</li>
+<li>Hiển thị trực tiếp qua <code>kmssink</code> hoặc <code>waylandsink</code>.</li>
+<li>Đo "glass-to-glass": quay camera vào một đồng hồ mili-giây, chụp cả đồng hồ và màn hình, lấy hiệu.</li>
+</ul>
+<p><b>Xử lý mất frame và lỗi</b></p>
+<ul>
+<li><b>Phát hiện:</b> mỗi buffer V4L2 có số thứ tự (<code>sequence</code>); số nhảy cóc là mất frame. Theo dõi thêm thông điệp QoS và ERROR trên GStreamer bus.</li>
+<li><b>Nguyên nhân thường gặp:</b> CPU quá tải, băng thông USB không đủ, ít buffer, dây hoặc đầu nối kém.</li>
+<li><b>Phục hồi:</b> dùng watchdog; nếu quá một khoảng thời gian không có frame mới thì khởi động lại pipeline.</li>
+<li><b>An toàn:</b> không bao giờ để một ảnh đứng hình trên màn hình vì tài xế sẽ tưởng đó là hình trực tiếp. Khi mất tín hiệu, hiện màn hình đen kèm cảnh báo rõ ràng.</li>
+</ul>
+</div>
+<div class="en">
+<ul>
+<li><b>Rear camera:</b> one camera. A service listens on CAN (SocketCAN); when it sees the reverse-gear signal it brings the video to the top of the screen with guide lines overlaid. The image must be flipped horizontally.</li>
+<li><b>360° camera:</b> four fisheye cameras (front, rear, left, right). Each image needs lens-distortion correction, projection to a top-down view, then stitching around a picture of the car. This is heavy, so it runs on the GPU (OpenGL), and the four cameras must be time-synchronised.</li>
+<li><b>Early start:</b> the rear view must appear very soon after selecting reverse (US rule FMVSS 111 requires it within 2 seconds). So the camera service starts very early in boot and does not wait for the full UI.</li>
+</ul>
+<p><b>Reducing latency</b></p>
+<ul>
+<li>No encoding or decoding: use raw formats (YUYV, NV12) and avoid MJPEG/H.264 on the display path.</li>
+<li>No copying: use DMABUF so the camera, GPU and display share one buffer.</li>
+<li>Use hardware for colour conversion and scaling instead of CPU <code>videoconvert</code>.</li>
+<li>Set <code>sync=false</code> on the sink; keep queues small and <code>leaky</code> so they <b>drop old frames</b> rather than pile them up. For a rear camera a fresh image matters more than a complete sequence.</li>
+<li>Display directly through <code>kmssink</code> or <code>waylandsink</code>.</li>
+<li>Measure "glass to glass": point the camera at a millisecond clock, photograph the clock and the screen together, and subtract.</li>
+</ul>
+<p><b>Handling dropped frames and faults</b></p>
+<ul>
+<li><b>Detect:</b> every V4L2 buffer has a <code>sequence</code> number; a jump means lost frames. Also watch QoS and ERROR messages on the GStreamer bus.</li>
+<li><b>Usual causes:</b> CPU overload, not enough USB bandwidth, too few buffers, poor cable or connector.</li>
+<li><b>Recover:</b> use a watchdog; if no new frame arrives within a timeout, restart the pipeline.</li>
+<li><b>Safety:</b> never leave a frozen image on screen, because the driver will take it for live video. On signal loss show a black screen with a clear warning.</li>
+</ul>
+</div>
+<div class="ex"><p class="tag"><span class="vi">Ví dụ: pipeline camera lùi độ trễ thấp</span><span class="en">Example: a low-latency rear-camera pipeline</span></p>
+<pre><code>gst-launch-1.0 v4l2src device=/dev/video0 io-mode=dmabuf \
+  ! video/x-raw,format=NV12,width=1280,height=720,framerate=30/1 \
+  ! queue max-size-buffers=1 leaky=downstream \
+  ! videoflip method=horizontal-flip \
+  ! waylandsink sync=false
+
+<span class="c"># queue max-size-buffers=1 leaky=downstream → keep only the newest frame</span>
+<span class="c"># io-mode=dmabuf works only if the camera driver supports it;</span>
+<span class="c"># on a real product videoflip is replaced by the SoC's hardware element</span>
+
+<span class="c"># four cameras on one screen (simple 2x2 view, not a stitched top view)</span>
+gst-launch-1.0 compositor name=mix \
+    sink_0::xpos=0   sink_0::ypos=0   sink_1::xpos=640 sink_1::ypos=0 \
+    sink_2::xpos=0   sink_2::ypos=480 sink_3::xpos=640 sink_3::ypos=480 \
+  ! videoconvert ! autovideosink sync=false \
+  v4l2src device=/dev/video0 ! video/x-raw,width=640,height=480 ! queue leaky=downstream ! mix.sink_0 \
+  v4l2src device=/dev/video2 ! video/x-raw,width=640,height=480 ! queue leaky=downstream ! mix.sink_1 \
+  v4l2src device=/dev/video4 ! video/x-raw,width=640,height=480 ! queue leaky=downstream ! mix.sink_2 \
+  v4l2src device=/dev/video6 ! video/x-raw,width=640,height=480 ! queue leaky=downstream ! mix.sink_3</code></pre></div>
+<div class="tip"><b><span class="vi">Khi trả lời phỏng vấn:</span><span class="en">In an interview:</span></b> <span class="vi">trình bày theo thứ tự yêu cầu (thời gian hiện hình, độ trễ, an toàn) → kiến trúc → cách giảm trễ → cách phát hiện và phục hồi lỗi. Đó là cách một câu hỏi thiết kế được chấm điểm.</span><span class="en">present in this order: requirements (time to first image, latency, safety) → architecture → latency measures → fault detection and recovery. That is how a design question is graded.</span></div>
+</section>
+
+</main>
+</div>
+</div>
+
+<script>
+(function(){
+  var app=document.getElementById('app'), btns=document.querySelectorAll('.lang button');
+  function setLang(l){
+    app.setAttribute('data-lang',l);
+    btns.forEach(function(b){b.setAttribute('aria-pressed', b.dataset.l===l ? 'true':'false');});
+    try{localStorage.setItem('guide-lang',l);}catch(e){}
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){setLang(b.dataset.l);});});
+  var saved=null; try{saved=localStorage.getItem('guide-lang');}catch(e){}
+  if(saved==='en'||saved==='vi') setLang(saved);
+})();
+</script>
+
+</body></html>
