@@ -1,0 +1,11 @@
+flowchart TD
+A0["DEPENDS: build dependency"]
+A1["Build sysroot"]
+A2["Compile và link"]
+A3["Packages + RDEPENDS"]
+A4["Image cài runtime dependencies"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

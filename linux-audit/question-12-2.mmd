@@ -1,0 +1,13 @@
+flowchart TD
+A0["Register driver"]
+A1["Match và probe"]
+A2["Allocate IRQ / buffers / work"]
+A3["Device hoạt động"]
+A4["Stop callbacks và async work"]
+A5["Free resources / unregister"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+A4 --> A5
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

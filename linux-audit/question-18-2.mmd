@@ -1,0 +1,13 @@
+flowchart TD
+A0["Compressed source"]
+A1["Demux / parse / decode"]
+A2["Test fakesink sync=false"]
+A3["Decode chậm: codec / CPU / hardware"]
+A4["Decode nhanh: kiểm tra convert / upload"]
+A5["GPU / UI composition / sink timing"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+A4 --> A5
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

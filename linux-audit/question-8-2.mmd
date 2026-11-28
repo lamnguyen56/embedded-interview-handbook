@@ -1,0 +1,13 @@
+flowchart TD
+A0["Source từ SRC_URI"]
+A1["Target binary trong workdir"]
+A2["do_install vào D"]
+A3["FILES chia package"]
+A4["IMAGE_INSTALL chọn package"]
+A5["File trên target"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+A4 --> A5
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

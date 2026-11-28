@@ -1,0 +1,13 @@
+flowchart TD
+A0["ECU tạo frame"]
+A1["CAN controller: arbitration và CRC"]
+A2["SocketCAN nhận packet"]
+A3["can-daemon giải mã protocol"]
+A4["IPC command"]
+A5["Qt cập nhật player"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+A4 --> A5
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

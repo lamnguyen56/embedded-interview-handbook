@@ -1,0 +1,11 @@
+flowchart TD
+A0["Kernel config: y hoặc m"]
+A1["y: code trong Image; m: file .ko"]
+A2["Driver có sẵn trước rootfs?"]
+A3["Kernel hoặc initramfs chuẩn bị device"]
+A4["Mount rootfs"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

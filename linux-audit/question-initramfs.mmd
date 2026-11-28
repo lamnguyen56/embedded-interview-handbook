@@ -1,0 +1,10 @@
+sequenceDiagram
+participant K as Kernel
+participant I as Initramfs /init
+participant R as Main rootfs
+K->>K: Giải nén CPIO vào RAM
+K->>I: Chạy /init làm PID 1
+I->>I: Mount dev/proc/sys, load module nếu cần
+I->>R: Mount tại /newroot
+I->>R: exec switch_root sang /sbin/init
+Note over R: Main init tiếp tục PID 1

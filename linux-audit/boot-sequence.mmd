@@ -1,0 +1,37 @@
+sequenceDiagram
+autonumber
+participant B as Firmware / Bootloader
+participant K as Kernel
+participant D as Drivers
+participant I as PID 1
+participant S as Services
+participant A as Qt app
+Note over B,A: T0–T1: power và firmware
+B->>B: Nạp Image, DTB, bootargs
+B->>K: T2: chuyển quyền
+K->>K: Memory, interrupts, scheduler
+K->>D: T3: match và probe
+Note over K,D: Probe có thể deferred hoặc asynchronous
+alt Có initramfs
+K->>I: /init trong RAM
+I->>D: Chuẩn bị root device
+I->>I: Mount rootfs, exec switch_root sang main init
+else Không initramfs
+K->>K: Mount main rootfs
+K->>I: Chạy main init
+end
+Note over I: T4: main userspace
+I->>S: T5: khởi động theo dependency
+par USB
+S->>D: Udev subscription và enumerate
+and CAN
+S->>D: SocketCAN setup
+and Display
+I->>D: Chờ connector, tạo KMS config
+end
+I->>A: T6: exec player
+A->>A: Libraries, C++ objects, QML
+A->>D: T7: first UI frame
+S-->>A: T8: playlist / IPC
+A->>D: Read, decode và render
+Note over B,A: T9: first media frame

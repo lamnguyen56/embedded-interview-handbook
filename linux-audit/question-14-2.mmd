@@ -1,0 +1,15 @@
+flowchart TD
+A0["SOF: 1 bit"]
+A1["Arbitration: 11-bit ID + RTR"]
+A2["Control: 6 bits"]
+A3["Data: 0–8 byte"]
+A4["CRC + delimiter"]
+A5["ACK slot + delimiter"]
+A6["EOF: 7 bits"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+A4 --> A5
+A5 --> A6
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

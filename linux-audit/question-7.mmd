@@ -1,0 +1,29 @@
+flowchart TD
+N0["BSP / Distro / App layers"]
+N1["BitBake dependency graph"]
+N2["Fetch / Patch / Compile"]
+N3["Install staging"]
+N4["Packages"]
+N5["Image rootfs"]
+N0 -->|"Chuẩn bị / yêu cầu"| N1
+N1 -->|"Chuyển giao / kiểm tra"| N2
+N2 -->|"Thực thi / dữ liệu"| N3
+N3 --> N4
+N4 --> N5
+N1 -.->|"Có thể thất bại"| E0["Layer dependency thiếu"]
+N2 -.->|"Có thể thất bại"| E1["Fetch / patch lỗi"]
+N3 -.->|"Có thể thất bại"| E2["Missing package trong image"]
+classDef user fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px
+classDef kernel fill:#3d2a11,stroke:#f5a623,color:#fff3dd,stroke-width:2px
+classDef hardware fill:#282d35,stroke:#93a2b7,color:#f3f5f8,stroke-width:1.5px
+classDef build fill:#302443,stroke:#ad85ed,color:#f5eeff,stroke-width:2px
+classDef good fill:#173a2b,stroke:#38cf86,color:#e6fff2,stroke-width:2px
+classDef error fill:#402329,stroke:#f07683,color:#fff0f2,stroke-width:1.5px
+classDef io fill:#12383d,stroke:#41c7d5,color:#e7fdff,stroke-width:2px
+
+class N0 build
+class N1 build
+class N2 build
+class N3 build
+class N4 build
+class N5 build

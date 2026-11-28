@@ -1,0 +1,11 @@
+flowchart TD
+A0["Có firmware log?"]
+A1["Kiểm tra image / DTB / console"]
+A2["Có kernel log?"]
+A3["Root device / filesystem"]
+A4["Init và services"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

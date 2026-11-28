@@ -1,0 +1,11 @@
+flowchart TD
+A0["Kernel có thực sự chạy?"]
+A1["Console: UART / pinmux / driver"]
+A2["Earlycon phù hợp"]
+A3["Image / DTB / memory layout"]
+A4["So sánh image tốt / JTAG"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

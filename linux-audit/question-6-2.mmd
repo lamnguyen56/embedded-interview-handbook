@@ -1,0 +1,11 @@
+flowchart TD
+A0["Image: executable code"]
+A1["DTB: hardware description"]
+A2["bootargs: console / root / policy"]
+A3["Kernel khởi tạo"]
+A4["Rootfs: init và ứng dụng"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

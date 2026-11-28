@@ -1,0 +1,13 @@
+flowchart TD
+A0["Thread A gọi read"]
+A1["Kernel: dữ liệu chưa sẵn sàng"]
+A2["Block A và chạy thread B"]
+A3["Device interrupt / dữ liệu tới"]
+A4["Đánh thức A"]
+A5["A được schedule và read hoàn tất"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+A4 --> A5
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

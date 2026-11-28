@@ -1,0 +1,11 @@
+flowchart TD
+A0["Traffic ưu tiên cao tăng"]
+A1["Message ưu tiên thấp thua arbitration"]
+A2["Thời gian chờ tăng"]
+A3["Deadline miss / receiver timeout"]
+A4["Có thể không có lỗi CRC"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

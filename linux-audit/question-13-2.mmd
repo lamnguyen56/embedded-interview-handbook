@@ -1,0 +1,11 @@
+flowchart TD
+A0["Load failure: version / symbols"]
+A1["Probe failure: DT / clock / IRQ"]
+A2["Runtime failure: race / locks / pointer"]
+A3["Kernel log và stack trace"]
+A4["ftrace với filter phù hợp"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

@@ -1,0 +1,23 @@
+flowchart TB
+subgraph U["USER SPACE"]
+A["Application"]:::user -->|"read / write"| L["libc wrapper"]:::user
+end
+subgraph K["KERNEL SPACE"]
+S["System call entry"]:::kernel -->|"Kiểm tra fd, quyền, buffer"| H["VFS / Subsystem"]:::kernel
+H --> D["Driver"]:::kernel
+end
+L -->|"svc · chuyển mức đặc quyền"| S
+S -->|"Return: dữ liệu / errno"| L
+D -->|"I/O request"| HW["Hardware"]:::hardware
+D -.->|"I/O timeout / hardware error"| E["Lỗi có thể trả về syscall"]:::error
+S -.->|"EBADF / EFAULT / permission"| E
+style U fill:#101e2e,stroke:#409cff,stroke-dasharray:6 4,color:#7dbaff
+style K fill:#261e11,stroke:#f5a623,stroke-dasharray:6 4,color:#ffc061
+
+classDef user fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px
+classDef kernel fill:#3d2a11,stroke:#f5a623,color:#fff3dd,stroke-width:2px
+classDef hardware fill:#282d35,stroke:#93a2b7,color:#f3f5f8,stroke-width:1.5px
+classDef build fill:#302443,stroke:#ad85ed,color:#f5eeff,stroke-width:2px
+classDef good fill:#173a2b,stroke:#38cf86,color:#e6fff2,stroke-width:2px
+classDef error fill:#402329,stroke:#f07683,color:#fff0f2,stroke-width:1.5px
+classDef io fill:#12383d,stroke:#41c7d5,color:#e7fdff,stroke-width:2px

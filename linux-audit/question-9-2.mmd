@@ -1,0 +1,11 @@
+flowchart TD
+A0["Schematic / datasheet"]
+A1["DT node: compatible / reg / IRQ / clocks"]
+A2["Driver core match"]
+A3["Provider chưa ready: deferred probe"]
+A4["Retry / probe thành công"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

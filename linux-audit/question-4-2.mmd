@@ -1,0 +1,13 @@
+flowchart TD
+A0["Firmware nạp artifacts"]
+A1["Kernel entry"]
+A2["Memory / scheduler / drivers"]
+A3["Mount rootfs"]
+A4["Exec PID 1"]
+A5["Start services song song theo dependency"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+A4 --> A5
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

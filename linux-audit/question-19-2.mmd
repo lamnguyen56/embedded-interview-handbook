@@ -1,0 +1,13 @@
+flowchart TD
+A0["Waiting: chưa có frame"]
+A1["Live: frame hợp lệ trong deadline"]
+A2["Timeout / stale frame"]
+A3["Fault: cảnh báo hình không hợp lệ"]
+A4["Recovery có giới hạn"]
+A5["Fresh frame: trở lại Live"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+A4 --> A5
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

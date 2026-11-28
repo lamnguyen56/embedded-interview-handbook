@@ -1,0 +1,13 @@
+flowchart TD
+A0["USB: block device + filesystem"]
+A1["usb-monitor: mount và scan"]
+A2["Playlist tới Qt"]
+A3["CAN: controller + SocketCAN"]
+A4["can-daemon: protocol decode"]
+A5["IPC tới Qt"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+A4 --> A5
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

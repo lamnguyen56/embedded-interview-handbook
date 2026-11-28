@@ -1,0 +1,13 @@
+flowchart TD
+A0["App: QBUF giao driver"]
+A1["Driver / device: capture hoặc DMA"]
+A2["Buffer hoàn tất"]
+A3["App: DQBUF nhận lại"]
+A4["Process frame"]
+A5["QBUF trả lại để tái sử dụng"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+A4 --> A5
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

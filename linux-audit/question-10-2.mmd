@@ -1,0 +1,13 @@
+flowchart TD
+A0["Architecture / toolchain"]
+A1["libc / loader"]
+A2["Init + BusyBox"]
+A3["Device và mounts"]
+A4["Application dependencies"]
+A5["Filesystem image"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+A4 --> A5
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

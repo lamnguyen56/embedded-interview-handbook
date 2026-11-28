@@ -1,0 +1,13 @@
+flowchart TD
+A0["CPIO archive"]
+A1["Bundle kernel hoặc file external"]
+A2["Firmware nạp vào RAM"]
+A3["Kernel unpack archive"]
+A4["Exec /init làm PID 1"]
+A5["Mount rootfs / exec switch_root"]
+A0 --> A1
+A1 --> A2
+A2 --> A3
+A3 --> A4
+A4 --> A5
+classDef default fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px

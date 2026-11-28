@@ -1,0 +1,158 @@
+<!doctype html><html lang="vi"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Embedded Linux Audit Explorer</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf2f8;color:#162d47;font:16px/1.7 system-ui,sans-serif}header{padding:32px 5%;background:#122b49;color:white}h1{font-size:30px;margin:0}header p{color:#c5d8ef;max-width:900px}main{display:grid;grid-template-columns:265px minmax(0,1fr);gap:24px;padding:24px;max-width:1440px;margin:auto}nav{position:sticky;top:12px;max-height:95vh;overflow:auto;align-self:start}nav a{display:block;color:#294d76;text-decoration:none;padding:8px 12px;font-size:14px;border-radius:8px}nav a:hover,nav a.active{background:#d1e4fa}article{min-width:0}section{background:white;border-radius:16px;padding:26px}.diagram{overflow:auto;background:#fafdff;border:1px solid #d9e3ef;border-radius:12px;padding:18px;margin:20px 0}.diagram svg{display:block;margin:auto;max-width:100%;height:auto}.note{background:#fff7e6;border-left:4px solid #d49b36;padding:14px 18px}.chips,.actions{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}a,button{color:#155b9e}button,.chips a{font:inherit;border:0;border-radius:8px;background:#e4effc;padding:7px 12px;cursor:pointer;text-decoration:none}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#142b43;color:#e8f1fc;padding:18px;border-radius:10px;font-size:13px}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:10px;border-bottom:1px solid #dae4ef}summary{cursor:pointer;color:#155b9e}footer{padding:20px 5%;font-size:13px;color:#5d6e84}@media(max-width:800px){main{display:block;padding:12px}nav{position:static;max-height:190px;margin-bottom:16px}section{padding:18px}}@media print{nav,.actions,.chips,details{display:none}main{display:block}body{background:white}}
+
+:root{--ink:#20334b;--muted:#65768c;--blue:#2164b2;--line:#dfe7f0}
+body{font-family:"Segoe UI",system-ui,sans-serif;font-size:16px;line-height:1.85;background:#f3f6fa;color:var(--ink)}
+header{padding:42px max(5%,calc((100vw - 1390px)/2));background:linear-gradient(115deg,#102b4b,#224f78);border-bottom:4px solid #63b7ca}
+header small{font-size:11px;font-weight:700;letter-spacing:2px;color:#a9d8ed}
+header h1{font-size:clamp(25px,3vw,38px);line-height:1.3;margin:12px 0}
+header p{font-size:16px;line-height:1.75;margin:14px 0 0;max-width:810px}
+main{grid-template-columns:285px minmax(0,1fr);gap:30px;max-width:1460px;padding:30px 24px}
+nav{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 10px;scrollbar-width:thin}
+nav a{font-size:13px;line-height:1.5;padding:10px 12px;margin:3px 0;border-left:3px solid transparent}
+nav a.active{background:#eaf2fc;border-left-color:var(--blue);font-weight:650;color:#174d8f}
+nav a:hover{background:#f0f5fb}
+section{border:1px solid var(--line);padding:clamp(22px,3vw,42px);box-shadow:0 8px 26px #233a5810}
+section>small{display:inline-block;color:#39708f;font-size:11px;font-weight:700;letter-spacing:1.6px;background:#eaf4f7;padding:5px 11px;border-radius:5px}
+h2{font-size:clamp(23px,2.5vw,30px);line-height:1.4;margin:12px 0 24px;letter-spacing:-.4px}
+h3{font-size:19px;margin:28px 0 12px}p{margin:16px 0;max-width:850px}
+li{margin:9px 0;padding-left:4px}ul,ol{padding-left:25px;margin:18px 0}
+strong{color:#153f66;font-weight:650}
+.diagram{background:#f9fbfe;border:1px solid #dbe6f1;padding:26px 18px;margin:28px 0;border-radius:12px}
+.diagram svg{min-width:420px}
+#page>.diagram{max-height:900px}
+.note{border-left:4px solid #e0af52;background:#fff9ec;border-radius:0 9px 9px 0;padding:18px 22px;margin:28px 0;font-size:15px}
+pre{background:#142c43;padding:22px 24px;font:13px/1.85 Consolas,monospace;border:1px solid #24435e;border-radius:10px;margin:20px 0}
+p code,li code,td code{background:#edf3fa;color:#245782;border-radius:4px;padding:2px 5px}
+table{font-size:14px;line-height:1.7;margin:22px 0}th{background:#eef4fb;color:#244e77;font-weight:650}td,th{padding:13px 16px;border-color:#e2e9f2}tr:nth-child(even) td{background:#fafcfe}
+.chips{gap:9px;margin:10px 0 24px}.chips a{font-size:13px;font-weight:600;border:1px solid #d6e5f5;background:#f3f7fd;padding:8px 14px}.chips a:hover{background:#dfeeff;border-color:#8bb7e6}
+.actions{border-top:1px solid var(--line);padding-top:22px;margin-top:32px;align-items:center;gap:20px;font-size:14px}
+.actions a{text-decoration:none;font-weight:600}button{font-size:13px;padding:7px 14px}
+details{margin-top:24px;border:1px solid var(--line);border-radius:8px;padding:12px 16px;background:#fafcfe}summary{font-size:13px;font-weight:600}details pre{margin-bottom:0}
+footer{max-width:1460px;margin:auto;padding:24px;font-size:12px;line-height:1.9}
+@media(max-width:900px){main{grid-template-columns:230px minmax(0,1fr);gap:18px;padding:18px}.diagram{padding:15px}}
+@media(max-width:700px){main{display:block;padding:12px}nav{position:static;max-height:200px;margin-bottom:16px}.diagram svg{min-width:360px}header{padding:28px 22px}section{padding:22px 18px}}
+@media print{header{background:white;color:#142c43}header p,header small{color:#52677e}section{box-shadow:none;border:0}.diagram{max-height:none!important}pre{background:#f2f4f6;color:#182c43}footer{font-size:10px}}
+
+@media(min-width:901px){
+body{height:100vh;overflow:hidden}
+header{height:66px;padding:12px 22px;display:flex;align-items:center;gap:22px;border-bottom:1px solid #dbe4ee;background:#132c48}
+header small{display:none}header h1{font-size:21px;white-space:nowrap;margin:0}header p{font-size:12px;margin:0}
+main{height:calc(100vh - 66px);max-width:none;padding:10px;gap:10px;grid-template-columns:205px minmax(0,1fr)}
+nav{position:static;max-height:none;height:100%;border-radius:8px;padding:5px;overflow:auto}
+nav a{font-size:12px;padding:7px 8px;margin:1px 0}
+article{height:100%;overflow:hidden}
+section{height:100%;overflow:auto;padding:14px 20px;border-radius:8px;box-shadow:none}
+section.diagram-view{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);grid-template-rows:auto minmax(0,1fr);gap:12px;overflow:hidden}
+section.diagram-view>h2{grid-column:1 / -1;font-size:21px;margin:0;padding:0 0 8px;border-bottom:1px solid #e2e9f2}
+section.diagram-view>small{display:none}
+.visual-pane{min-height:0;display:flex;flex-direction:column;gap:8px}
+.diagram{flex:1;min-height:0;margin:0!important;padding:10px!important;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+.diagram svg{width:100%!important;height:100%!important;max-width:100%!important;min-width:0!important;object-fit:contain;transform-origin:center}
+.analysis-pane{min-height:0;overflow:auto;padding:0 12px 16px 4px;font-size:14px;line-height:1.8}
+.analysis-pane p{margin:10px 0}.analysis-pane pre{padding:14px;font-size:12px}.analysis-pane .note{margin:18px 0;padding:14px}
+.analysis-pane .chips{gap:5px;margin:8px 0 18px}.analysis-pane .chips a{font-size:12px;padding:5px 9px}
+.analysis-pane .actions{font-size:12px;margin-top:20px;padding-top:12px;gap:14px}
+.diagram-tools{display:flex;gap:6px;justify-content:flex-end}
+.diagram-tools button{font-size:12px;padding:4px 10px;background:#edf3fa;border:1px solid #dce7f2}
+footer{display:none}
+}
+.diagram:fullscreen{background:#f9fbfe;padding:24px!important}
+.diagram:fullscreen svg{width:100%;height:100%;min-width:0;max-width:100%}
+@media(max-width:900px){.analysis-pane{margin-top:20px}.diagram{height:65vh;overflow:auto}.diagram svg{max-height:100%;min-width:0}.diagram-tools{display:flex;gap:8px;margin-top:8px}}
+
+@media(min-width:901px){
+.visual-pane{overflow:hidden}
+.diagram{display:block!important;overflow:auto!important;overscroll-behavior:contain}
+.diagram svg{display:block!important;width:auto!important;height:auto!important;max-width:none!important;min-width:720px!important;margin:12px auto!important}
+.diagram svg[id]{max-height:none!important}
+.analysis-pane{overflow:auto;overscroll-behavior:contain}
+}
+.diagram:fullscreen{overflow:auto!important;display:block!important}
+.diagram:fullscreen svg{width:auto!important;height:auto!important;max-width:none!important;min-width:900px!important}
+
+.diagram{background:#171d26!important;border-color:#394659!important;color:#f1f6ff}
+.diagram:fullscreen{background:#171d26!important}
+.diagram .edgeLabel{color:#edf5ff}
+.diagram .node rect,.diagram .node polygon{rx:8px;ry:8px}
+.color-key{display:flex;flex-wrap:wrap;gap:8px;font-size:11px;margin-bottom:4px}
+.color-key span{padding:2px 7px;border-radius:4px;border:1px solid #d4dfec}
+
+@media(min-width:901px){
+section.diagram-view{grid-template-columns:minmax(0,3fr) minmax(260px,1fr)}
+.analysis-pane{font-size:13px;padding-right:6px}
+}
+.diagram svg{margin:0!important}
+ .diagram-picker{flex:none;padding-bottom:6px}.diagram-picker select{font:inherit;font-size:13px;padding:7px 10px;border:1px solid #cbdcec;border-radius:7px;background:#f4f8fd;color:#214a75;max-width:100%}</style>
+<header><small>AUDIT EXPLORER · BUILD → BOOT → RUNTIME</small><h1>Embedded Linux: bức tranh tổng thể</h1><p>Kiến trúc, trình tự khởi động và luồng dữ liệu của hệ thống Embedded Linux.</p></header>
+<main><nav id="nav"></nav><article><section id="page"></section></article></main>
+<footer>T0–T9 là mốc logic, không phải số giây đã đo. Pi không mặc định dùng U-Boot. Camera 360 là thiết kế đề xuất. Nội dung phục vụ audit, không xác nhận config kernel hiện tại.<br>Nguồn: <a href="https://docs.yoctoproject.org/5.0/dev-manual/building.html">Yocto</a> · <a href="https://docs.kernel.org/filesystems/ramfs-rootfs-initramfs.html">Initramfs</a> · <a href="https://www.kernel.org/doc/html/latest/networking/can.html">SocketCAN</a> · <a href="https://docs.kernel.org/userspace-api/media/v4l/mmap.html">V4L2</a></footer>
+<script src="mermaid.min.js"></script><script src="marked.min.js"></script><script src="data.js"></script><script>
+const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+const groups=[['BUILD · Trước T0',[2,7,8,9,10]],['T0–T2 · Bootloader',[4,6,3,5]],['T3–T4 · Kernel và rootfs',[11,12,13,'initramfs']],['T5–T9 · Userspace và dữ liệu',[1,14,15,16,17,18,19]]];
+function chips(){return groups.map(([label,ids])=>'<p><strong>'+label+'</strong></p><div class="chips">'+ids.map(id=>'<a href="#q'+id+'">'+(id==='initramfs'?'Initramfs':'Câu '+id)+'</a>').join('')+'</div>').join('')}
+document.getElementById('nav').innerHTML='<a href="#overview">Bản đồ tổng quan</a><a href="#sequence">Sequence boot đầy đủ</a><a href="#timing">Timing và readiness</a>'+DATA.items.map(t=>'<a href="#q'+t.id+'">'+(t.id==='initramfs'?'Bổ sung':('Câu '+t.id))+' · '+t.title+'</a>').join('');
+mermaid.initialize({startOnLoad:false,securityLevel:'loose',theme:'base',themeVariables:{darkMode:true,background:'#171d26',fontFamily:'Segoe UI, sans-serif',fontSize:'16px',primaryColor:'#192e49',primaryTextColor:'#f0f6ff',primaryBorderColor:'#409cff',lineColor:'#b5c4d9',secondaryColor:'#3d2a11',tertiaryColor:'#302443',textColor:'#eef4fc',edgeLabelBackground:'#232d3b',clusterBkg:'#111d2b',clusterBorder:'#597592',actorBkg:'#192e49',actorBorder:'#409cff',actorTextColor:'#f0f6ff',actorLineColor:'#657e9c',signalColor:'#c4d7ee',signalTextColor:'#edf5ff',noteBkgColor:'#38301d',noteTextColor:'#fff2ce',noteBorderColor:'#d6a94b',labelBoxBkgColor:'#28384f',labelBoxBorderColor:'#6c8bb2',labelTextColor:'#f1f7ff',loopTextColor:'#f1f7ff'},flowchart:{htmlLabels:true,curve:'basis',nodeSpacing:35,rankSpacing:45},sequence:{useMaxWidth:true,actorMargin:35,messageMargin:28}});
+let version=0;let selectedDiagrams={};
+async function route(){
+const run=++version,id=location.hash.slice(1)||'overview',item=DATA.items.find(t=>'q'+t.id===id),p=document.getElementById('page');
+let graph='',html='';
+if(item){graph=item.diagrams?.[selectedDiagrams[item.id]||0]?.source||item.diagram;html='<small>CHI TIẾT · '+(item.id==='initramfs'?'EARLY USERSPACE':'CÂU '+item.id)+'</small><h2>'+item.title+'</h2><div id="graph" class="diagram"></div>'+marked.parse(item.body)+'<p class="note"><strong>Phân tích bổ sung:</strong> '+item.note+'</p>'}
+else if(id==='sequence'){graph=DATA.sequence;html='<h2>Sequence: từ power-on đến frame đầu tiên</h2><div id="graph" class="diagram"></div>'+chips()+'<p class="note">Đây là mô hình thứ tự tổng quát, không phải tỷ lệ thời gian. Driver probe và service có thể bất đồng bộ.</p>'}
+else if(id==='timing'){html='<h2>Timing: đo đến mốc nào?</h2><table><tr><th>Khoảng</th><th>Công việc</th><th>Bằng chứng</th></tr><tr><td>T0–T2</td><td>Firmware, autoboot, load image</td><td>Serial / đo ngoài</td></tr><tr><td>T2–T4</td><td>Kernel, probe, mount rootfs</td><td>Kernel monotonic log</td></tr><tr><td>T4–T6</td><td>Services, dependency, display gate</td><td>systemd journal</td></tr><tr><td>T6–T7</td><td>Qt startup tới UI đầu tiên</td><td>First-frame instrumentation</td></tr><tr><td>T7–T9</td><td>Dữ liệu, decode, media frame đầu</td><td>IPC và media timestamps</td></tr></table><p class="note">Type=simple active ≠ UI hiện ≠ media phát. Readiness khác dependency ordering. Chưa gán thời gian thực tế khi chưa đo board.</p><pre>journalctl -k -b -o short-monotonic\njournalctl -u usb-video-player -b -o short-monotonic</pre>'}
+else{graph=DATA.overview;html='<h2>Tổng quan hệ thống</h2><div id="graph" class="diagram"></div>'+chips()}
+html+='<div class="actions"><a href="#overview">← Bản đồ</a><a href="#sequence">Sequence</a><a href="#timing">Timing</a><button id="print">In trang này</button></div>';
+if(graph)html+='<details><summary>Xem nguồn Mermaid</summary><pre>'+esc(graph)+'</pre></details>';
+p.innerHTML=html;document.getElementById('print').onclick=()=>window.print();
+p.classList.toggle('diagram-view',!!graph);
+if(graph){
+ const heading=p.querySelector('h2'), diagram=p.querySelector('#graph');
+ const visual=document.createElement('div');visual.className='visual-pane';
+ const analysis=document.createElement('div');analysis.className='analysis-pane';
+ const others=Array.from(p.children).filter(x=>x!==heading&&x!==diagram&&x.tagName!=='SMALL');
+ others.forEach(x=>analysis.appendChild(x));
+ const legend=document.createElement('div');legend.className='color-key';legend.innerHTML='<span style="border-color:#409cff">Userspace</span><span style="border-color:#f5a623">Kernel / xử lý</span><span style="border-color:#ad85ed">Boot / Build</span><span style="border-color:#41c7d5">Dữ liệu / I/O</span><span style="border-color:#38cf86">Kết quả</span><span style="border-color:#f07683">Lỗi</span>';if(item&&item.diagrams?.length>1){
+ const row=document.createElement('div');row.className='diagram-picker';
+ const select=document.createElement('select');select.setAttribute('aria-label','Chọn sơ đồ');
+ item.diagrams.forEach((entry,i)=>{const option=document.createElement('option');option.value=i;option.textContent=(i+1)+'. '+entry.title;option.selected=i===(selectedDiagrams[item.id]||0);select.appendChild(option)});
+ select.onchange=()=>{selectedDiagrams[item.id]=Number(select.value);route()};
+ row.appendChild(select);visual.appendChild(row);
+}
+visual.append(legend,diagram);
+ const tools=document.createElement('div');tools.className='diagram-tools';
+ tools.innerHTML='<button data-action="out" aria-label="Thu nhỏ">−</button><button data-action="fit">Vừa khung</button><button data-action="in" aria-label="Phóng to">+</button><button data-action="full">Toàn màn hình</button>';
+ visual.appendChild(tools);p.append(visual,analysis);
+ let zoom=1;
+ const applyZoom=(fit=false)=>{
+  const svg=diagram.querySelector('svg');if(!svg)return;
+  const bw=Number(svg.dataset.baseWidth)||900;
+  const bh=Number(svg.dataset.baseHeight)||900;
+  if(fit)zoom=Math.min((diagram.clientWidth-24)/bw,(diagram.clientHeight-24)/bh);
+  zoom=Math.max(.02,Math.min(6,zoom));
+  svg.style.setProperty('width',(bw*zoom)+'px','important');
+  svg.style.setProperty('height',(bh*zoom)+'px','important');
+  svg.style.setProperty('min-width','0','important');
+  svg.style.setProperty('max-width','none','important');
+  svg.style.transform='none';
+  diagram.style.overflow='auto';
+  if(fit){diagram.scrollTop=0;diagram.scrollLeft=0;}
+ };
+ tools.onclick=e=>{
+  const action=e.target.dataset.action;if(!action)return;
+  if(action==='full'){diagram.requestFullscreen?.();return}
+  if(action==='fit'){applyZoom(true);return}
+  zoom*=action==='in'?1.2:1/1.2;applyZoom();
+ };
+ diagram._fit=()=>applyZoom(true);
+ diagram.addEventListener('wheel',e=>{
+  if(!e.ctrlKey)return;
+  e.preventDefault();zoom*=e.deltaY<0?1.1:1/1.1;applyZoom();
+ },{passive:false});
+}
+document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('active',a.hash==='#'+id));
+if(graph)try{const result=await mermaid.render('diagram'+run,graph);if(run!==version)return;document.getElementById('graph').innerHTML=result.svg;result.bindFunctions?.(document.getElementById('graph'));const svg=document.querySelector('#graph svg');if(svg){const vb=svg.viewBox.baseVal;const width=id==='sequence'?Math.max(1000,vb.width):Math.max(760,vb.width);svg.dataset.baseWidth=width;svg.dataset.baseHeight=width*(vb.height/vb.width);svg.style.setProperty('width',width+'px','important');svg.style.setProperty('height',svg.dataset.baseHeight+'px','important');svg.style.setProperty('min-width','0','important');requestAnimationFrame(()=>document.getElementById('graph')._fit?.())}}catch(e){document.getElementById('graph').textContent='Không render được: '+e}
+window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);route();
+</script></html>

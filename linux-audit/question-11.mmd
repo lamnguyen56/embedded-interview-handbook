@@ -1,0 +1,20 @@
+flowchart TB
+A["Userspace application"]:::user -->|"System call"| S["System call interface"]:::user
+S --> V["File operations / VFS"]:::io
+S --> F["Filesystem / Block layer"]:::io
+S --> N["Network stack"]:::io
+V --> C["Character driver"]:::kernel
+F --> B["Block driver"]:::kernel
+N --> D["Network driver"]:::kernel
+C --> U["UART / GPIO / V4L2"]:::hardware
+B --> M["SD / eMMC / USB storage"]:::hardware
+D --> E["Ethernet / CAN"]:::hardware
+S -.->|"API hoặc permission không hợp lệ"| X["errno về ứng dụng"]:::error
+
+classDef user fill:#192e49,stroke:#409cff,color:#eff6ff,stroke-width:2px
+classDef kernel fill:#3d2a11,stroke:#f5a623,color:#fff3dd,stroke-width:2px
+classDef hardware fill:#282d35,stroke:#93a2b7,color:#f3f5f8,stroke-width:1.5px
+classDef build fill:#302443,stroke:#ad85ed,color:#f5eeff,stroke-width:2px
+classDef good fill:#173a2b,stroke:#38cf86,color:#e6fff2,stroke-width:2px
+classDef error fill:#402329,stroke:#f07683,color:#fff0f2,stroke-width:1.5px
+classDef io fill:#12383d,stroke:#41c7d5,color:#e7fdff,stroke-width:2px
